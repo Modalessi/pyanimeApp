@@ -3,19 +3,32 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00BF33FEB5864621EDA348AA /* Pods_pyanime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32D1322DD8A91F32D40E2323 /* Pods_pyanime.framework */; };
+		59874D93280C968C00333EC3 /* GogoanimeAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59874D92280C968C00333EC3 /* GogoanimeAPI.swift */; };
 		59C3C0BB2801309600132FF0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3C0BA2801309600132FF0 /* AppDelegate.swift */; };
 		59C3C0BD2801309600132FF0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3C0BC2801309600132FF0 /* SceneDelegate.swift */; };
 		59C3C0BF2801309600132FF0 /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3C0BE2801309600132FF0 /* SearchVC.swift */; };
 		59C3C0C4280130A200132FF0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59C3C0C3280130A200132FF0 /* Assets.xcassets */; };
 		59C3C0C7280130A200132FF0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 59C3C0C5280130A200132FF0 /* LaunchScreen.storyboard */; };
-		59C3C0D42801363600132FF0 /* PASecondaryFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3C0D32801363600132FF0 /* PASecondaryFont.swift */; };
+		59C3C0D42801363600132FF0 /* PASecondaryLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3C0D32801363600132FF0 /* PASecondaryLabel.swift */; };
+		59C3C0D928013B1100132FF0 /* ResultsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3C0D828013B1100132FF0 /* ResultsVC.swift */; };
+		59C3C0DC28013CB000132FF0 /* UIViewController+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3C0DB28013CB000132FF0 /* UIViewController+EXT.swift */; };
+		59C3C0DF28013CEC00132FF0 /* PAAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3C0DE28013CEC00132FF0 /* PAAlertViewController.swift */; };
+		59C3C0E328013D2100132FF0 /* PABodyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3C0E128013D2100132FF0 /* PABodyLabel.swift */; };
+		59C3C0E428013D2100132FF0 /* PATitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3C0E228013D2100132FF0 /* PATitleLabel.swift */; };
+		59C3C0E928013D6300132FF0 /* PAButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3C0E828013D6300132FF0 /* PAButton.swift */; };
+		59E87181280D4F460020B884 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E87180280D4F460020B884 /* SearchResult.swift */; };
+		59E87188280D57E60020B884 /* PAError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E87187280D57E60020B884 /* PAError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B9857FE0EFFAFF78FFBD951 /* Pods-pyanime.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pyanime.release.xcconfig"; path = "Target Support Files/Pods-pyanime/Pods-pyanime.release.xcconfig"; sourceTree = "<group>"; };
+		32D1322DD8A91F32D40E2323 /* Pods_pyanime.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_pyanime.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		59874D92280C968C00333EC3 /* GogoanimeAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GogoanimeAPI.swift; sourceTree = "<group>"; };
 		59C3C0B72801309600132FF0 /* pyanime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pyanime.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		59C3C0BA2801309600132FF0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		59C3C0BC2801309600132FF0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -23,7 +36,16 @@
 		59C3C0C3280130A200132FF0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		59C3C0C6280130A200132FF0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		59C3C0C8280130A200132FF0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		59C3C0D32801363600132FF0 /* PASecondaryFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PASecondaryFont.swift; sourceTree = "<group>"; };
+		59C3C0D32801363600132FF0 /* PASecondaryLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PASecondaryLabel.swift; sourceTree = "<group>"; };
+		59C3C0D828013B1100132FF0 /* ResultsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsVC.swift; sourceTree = "<group>"; };
+		59C3C0DB28013CB000132FF0 /* UIViewController+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+EXT.swift"; sourceTree = "<group>"; };
+		59C3C0DE28013CEC00132FF0 /* PAAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAAlertViewController.swift; sourceTree = "<group>"; };
+		59C3C0E128013D2100132FF0 /* PABodyLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PABodyLabel.swift; sourceTree = "<group>"; };
+		59C3C0E228013D2100132FF0 /* PATitleLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PATitleLabel.swift; sourceTree = "<group>"; };
+		59C3C0E828013D6300132FF0 /* PAButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAButton.swift; sourceTree = "<group>"; };
+		59E87180280D4F460020B884 /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
+		59E87187280D57E60020B884 /* PAError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAError.swift; sourceTree = "<group>"; };
+		E9A39A32EC8FFF7D98B34397 /* Pods-pyanime.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pyanime.debug.xcconfig"; path = "Target Support Files/Pods-pyanime/Pods-pyanime.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00BF33FEB5864621EDA348AA /* Pods_pyanime.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +65,8 @@
 			children = (
 				59C3C0B92801309600132FF0 /* pyanime */,
 				59C3C0B82801309600132FF0 /* Products */,
+				A41E49C29F74FFCF734D3FAE /* Pods */,
+				E8DBE5768354A0F6CDB99B42 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,10 +81,11 @@
 		59C3C0B92801309600132FF0 /* pyanime */ = {
 			isa = PBXGroup;
 			children = (
-				59C3C0D22801360B00132FF0 /* Labels */,
+				59E87186280D57BB0020B884 /* Models */,
+				59E87183280D578B0020B884 /* Views */,
+				59E87185280D57A30020B884 /* Controllers */,
 				59C3C0BA2801309600132FF0 /* AppDelegate.swift */,
 				59C3C0BC2801309600132FF0 /* SceneDelegate.swift */,
-				59C3C0BE2801309600132FF0 /* SearchVC.swift */,
 				59C3C0C3280130A200132FF0 /* Assets.xcassets */,
 				59C3C0C5280130A200132FF0 /* LaunchScreen.storyboard */,
 				59C3C0C8280130A200132FF0 /* Info.plist */,
@@ -70,9 +96,58 @@
 		59C3C0D22801360B00132FF0 /* Labels */ = {
 			isa = PBXGroup;
 			children = (
-				59C3C0D32801363600132FF0 /* PASecondaryFont.swift */,
+				59C3C0E128013D2100132FF0 /* PABodyLabel.swift */,
+				59C3C0E228013D2100132FF0 /* PATitleLabel.swift */,
+				59C3C0D32801363600132FF0 /* PASecondaryLabel.swift */,
 			);
 			path = Labels;
+			sourceTree = "<group>";
+		};
+		59E87183280D578B0020B884 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				59C3C0E828013D6300132FF0 /* PAButton.swift */,
+				59C3C0D22801360B00132FF0 /* Labels */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		59E87185280D57A30020B884 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				59C3C0DB28013CB000132FF0 /* UIViewController+EXT.swift */,
+				59C3C0DE28013CEC00132FF0 /* PAAlertViewController.swift */,
+				59C3C0D828013B1100132FF0 /* ResultsVC.swift */,
+				59C3C0BE2801309600132FF0 /* SearchVC.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		59E87186280D57BB0020B884 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				59E87180280D4F460020B884 /* SearchResult.swift */,
+				59874D92280C968C00333EC3 /* GogoanimeAPI.swift */,
+				59E87187280D57E60020B884 /* PAError.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A41E49C29F74FFCF734D3FAE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E9A39A32EC8FFF7D98B34397 /* Pods-pyanime.debug.xcconfig */,
+				1B9857FE0EFFAFF78FFBD951 /* Pods-pyanime.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		E8DBE5768354A0F6CDB99B42 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				32D1322DD8A91F32D40E2323 /* Pods_pyanime.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -82,9 +157,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 59C3C0CB280130A200132FF0 /* Build configuration list for PBXNativeTarget "pyanime" */;
 			buildPhases = (
+				CB653DF1AD33AE5BE465D714 /* [CP] Check Pods Manifest.lock */,
 				59C3C0B32801309600132FF0 /* Sources */,
 				59C3C0B42801309600132FF0 /* Frameworks */,
 				59C3C0B52801309600132FF0 /* Resources */,
+				54892981FB67F30D0D58A75F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -139,15 +216,66 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		54892981FB67F30D0D58A75F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-pyanime/Pods-pyanime-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-pyanime/Pods-pyanime-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-pyanime/Pods-pyanime-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CB653DF1AD33AE5BE465D714 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-pyanime-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		59C3C0B32801309600132FF0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				59C3C0D42801363600132FF0 /* PASecondaryFont.swift in Sources */,
+				59C3C0E928013D6300132FF0 /* PAButton.swift in Sources */,
+				59C3C0DF28013CEC00132FF0 /* PAAlertViewController.swift in Sources */,
+				59C3C0DC28013CB000132FF0 /* UIViewController+EXT.swift in Sources */,
+				59C3C0D42801363600132FF0 /* PASecondaryLabel.swift in Sources */,
 				59C3C0BF2801309600132FF0 /* SearchVC.swift in Sources */,
 				59C3C0BB2801309600132FF0 /* AppDelegate.swift in Sources */,
+				59C3C0D928013B1100132FF0 /* ResultsVC.swift in Sources */,
+				59E87188280D57E60020B884 /* PAError.swift in Sources */,
+				59874D93280C968C00333EC3 /* GogoanimeAPI.swift in Sources */,
+				59C3C0E428013D2100132FF0 /* PATitleLabel.swift in Sources */,
 				59C3C0BD2801309600132FF0 /* SceneDelegate.swift in Sources */,
+				59E87181280D4F460020B884 /* SearchResult.swift in Sources */,
+				59C3C0E328013D2100132FF0 /* PABodyLabel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,6 +411,7 @@
 		};
 		59C3C0CC280130A200132FF0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E9A39A32EC8FFF7D98B34397 /* Pods-pyanime.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -302,6 +431,7 @@
 		};
 		59C3C0CD280130A200132FF0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1B9857FE0EFFAFF78FFBD951 /* Pods-pyanime.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

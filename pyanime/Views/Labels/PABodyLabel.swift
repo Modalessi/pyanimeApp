@@ -31,7 +31,7 @@ class PABodyLabel: UILabel {
         textColor = .secondaryLabel
         font = UIFont.preferredFont(forTextStyle: .body)
         adjustsFontSizeToFitWidth = true
-        minimumScaleFactor = 0.75
+        minimumScaleFactor = 0.40
         lineBreakMode = .byWordWrapping
         
         translatesAutoresizingMaskIntoConstraints = false

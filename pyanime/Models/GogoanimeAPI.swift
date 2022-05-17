@@ -11,8 +11,8 @@ import SwiftSoup
 class GogoanimeAPI {
     
     
-    static let baseUrl: URL = URL(string: "https://gogoanime.fi/")!
-    
+    static let baseUrl: URL = URL(string: "https://gogoanime.sk/")!
+    let cache = NSCache<NSString, UIImage>()
     
     static let shared: GogoanimeAPI = GogoanimeAPI()
     
@@ -31,6 +31,8 @@ class GogoanimeAPI {
             return
         }
         
+        print(GogoanimeAPI.baseUrl)
+        print(searchUrl)
         
         let task = URLSession.shared.dataTask(with: searchUrl) { (data, response, error) in
             
@@ -74,6 +76,91 @@ class GogoanimeAPI {
         }
         
         task.resume()
+    }
+    
+    
+    
+    
+    func getAnime(of result: SearchResult, completed: @escaping (Result<Anime,PAError>)->Void) {
+        
+        var animeUrlComponents = URLComponents(url: GogoanimeAPI.baseUrl, resolvingAgainstBaseURL: true)
+        
+        animeUrlComponents?.path = result.link
+        
+        guard let animeUrl = animeUrlComponents?.url else {
+            completed(.failure(.invalidUrl))
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: animeUrl) { (data, response, error) in
+            
+            guard let data = data else {
+                completed(.failure(.fetchHtml))
+                return
+            }
+            
+            guard let html = String(data: data, encoding: .ascii) else {
+                completed(.failure(.fetchHtml))
+                return
+            }
+            
+            guard let document = try? SwiftSoup.parse(html) else {
+                completed(.failure(.htmlParsing))
+                return
+            }
+            
+            
+            let anime = Anime(searchResult: result, plot: "", episodes: [])
+            
+            do {
+                
+                // Get episodes
+                
+                let episodesEnds = try document.select("a").array().filter { $0.hasAttr("ep_end") }
+                let lastEpisode = try Int((episodesEnds.last?.attr("ep_end"))!)
+                
+                guard lastEpisode != nil else {
+                    completed(.failure(.extractingData))
+                    return
+                }
+                
+                let animePath = animeUrlComponents?.path
+                let animeName = animePath?.split(separator: "/").last
+                
+                for ep in 1...lastEpisode! {
+                    
+                    let episodePath = "\(String(describing: animeName))-episode-\(ep)"
+                    
+                    var episodeComponents = URLComponents(url: GogoanimeAPI.baseUrl, resolvingAgainstBaseURL: true)
+                    episodeComponents?.path = episodePath
+                    
+                    let episode = Episode(number: "\(ep)", link: "\(String(describing: episodeComponents!.url))")
+                    anime.episodes.append(episode)
+                }
+                
+                // Get plot
+                
+                let plotParagraph = try document.select("p").array().filter { try $0.attr("class") == "type" }
+                
+                print("text of span should be plot summary: ")
+                print(try plotParagraph[1].select("span").text())
+                let plot = try plotParagraph[1].text().dropFirst(13)
+                
+                anime.plot = String(plot)
+                print(anime.plot)
+                completed(.success(anime))
+                
+                
+            } catch {
+                completed(.failure(.extractingData))
+            }
+            
+            
+        }
+        
+        
+        task.resume()
+        
     }
     
     

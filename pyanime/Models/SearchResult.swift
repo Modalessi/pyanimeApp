@@ -6,8 +6,15 @@
 //
 
 
-struct SearchResult {
+class SearchResult {
     var name: String
     var link: String
     var imageUrl: String
+    
+    init(name: String, link: String, imageUrl: String) {
+        self.name = name
+        self.link = link
+        self.imageUrl = imageUrl
+    }
+    
 }

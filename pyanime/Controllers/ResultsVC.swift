@@ -35,7 +35,6 @@ class ResultsVC: UIViewController {
                 self.results = results
                 DispatchQueue.main.async {
                     self.resultsCollectionView.reloadData()
-                    print("the data is here")
                 }
             case .failure(let error) :
                 DispatchQueue.main.async {
@@ -104,7 +103,6 @@ extension ResultsVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = results[indexPath.row]
-        print("cashed image: \(results[indexPath.row].imageUrl)")
         procedsToAnimeVC(with: item)
     }
     

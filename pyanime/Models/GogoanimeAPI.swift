@@ -142,12 +142,9 @@ class GogoanimeAPI {
                 
                 let plotParagraph = try document.select("p").array().filter { try $0.attr("class") == "type" }
                 
-                print("text of span should be plot summary: ")
-                print(try plotParagraph[1].select("span").text())
                 let plot = try plotParagraph[1].text().dropFirst(13)
                 
                 anime.plot = String(plot)
-                print(anime.plot)
                 completed(.success(anime))
                 
                 

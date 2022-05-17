@@ -92,7 +92,6 @@ class AnimeInfoCell: UITableViewCell {
     
     
     func set(anime: Anime) {
-        print("anime image url: \(anime.imageUrl)")
         titleLabel.text = anime.name
         plotLabel.text = anime.plot
         posterImageView.downloadImage(from: anime.imageUrl)

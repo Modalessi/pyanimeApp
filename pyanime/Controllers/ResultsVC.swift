@@ -45,11 +45,11 @@ class ResultsVC: UIViewController {
     }
     
     
-    func procedsToAnimeVC(with selectedSearchResult: SearchResult) {
-        let animeVC = AnimeVC()
-        animeVC.title = selectedSearchResult.name
-        animeVC.selectedSearchResult = selectedSearchResult
-        navigationController?.pushViewController(animeVC, animated: true)
+    func procedsToShowVC(with selectedSearchResult: SearchResult) {
+        let showVC = ShowInfoVC()
+        showVC.title = selectedSearchResult.name
+        showVC.selectedSearchResult = selectedSearchResult
+        navigationController?.pushViewController(showVC, animated: true)
     }
     
     
@@ -104,7 +104,7 @@ extension ResultsVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = results[indexPath.row]
-        procedsToAnimeVC(with: item)
+        procedsToShowVC(with: item)
     }
     
 }

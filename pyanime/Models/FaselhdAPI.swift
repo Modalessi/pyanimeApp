@@ -75,6 +75,165 @@ class FaselhdAPI {
     }
     
     
+    func getShow(for searchResult: SearchResult, completed: @escaping (Result<Show, PAError>)->Void) {
+        
+        guard let showUrl = URL(string: searchResult.link) else {
+            completed(.failure(.invalidUrl))
+            return
+        }
+        
+        
+        let task = URLSession.shared.dataTask(with: showUrl) { (data, response, error) in
+                        
+            guard let data = data else {
+                completed(.failure(.fetchHtml))
+                return
+            }
+            
+            guard let html = String(data: data, encoding: .ascii) else {
+                completed(.failure(.fetchHtml))
+                return
+            }
+            
+            guard let document = try? SwiftSoup.parse(html) else {
+                completed(.failure(.htmlParsing))
+                return
+            }
+            
+            let show = Show()
+                        
+            if self.isMovie(document) {
+                show.isMovie = true
+                completed(.success(show))
+            } else {
+                
+                if self.hasSeasons(document) {
+                    self.getSeasons(document) { (result) in
+                        switch result {
+                        case .success(let seasons) :
+                            completed(.success(Show(from: searchResult, isMovie: false, seasons: seasons, episodes: nil)))
+                        case .failure(let error) :
+                            completed(.failure(error))
+                        }
+                    }
+                } else {
+                    self.getEpisodes(showUrl.description) { (result) in
+                        switch result {
+                        case .failure(let error) :
+                            completed(.failure(error))
+                        case .success(let episodes) :
+                            completed(.success(Show(from: searchResult, isMovie: false, seasons: nil, episodes: episodes)))
+                        }
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+        task.resume()
+        
+    }
+    
+    
+    func hasSeasons(_ document: Document)->Bool {
+        do {
+            let seasonsDiv = try document.getElementById("seasonList")
+            return seasonsDiv != nil
+        } catch {
+            return false
+        }
+    }
+    
+    
+    func isMovie(_ document: Document)-> Bool {
+        do {
+            let episodesDiv = try document.getElementById("epAll")
+            return episodesDiv == nil
+        } catch {
+            return false
+        }
+    }
+    
+    
+    func getSeasons(_ document: Document, completed: @escaping (Result<[Season], PAError>)->Void) {
+        var seasons: [Season] = []
+        
+        do {
+            let seasonsContainer = try document.getElementById("seasonList")
+            let seasonsDivs = try seasonsContainer!.getElementsByClass("col-xl-2 col-lg-3 col-md-6").array()
+            
+            let dispatchGroup = DispatchGroup()
+            for seasonDiv in seasonsDivs {
+                let baseUrl = "https://www.faselhd.pro/?p="
+                let div = try seasonDiv.getElementsByClass("seasonDiv").first()
+                let id = try div!.attr("data-href")
+                let link = baseUrl + id
+                var title = try div!.getElementsByClass("title").text()
+                title = String(title.filter {$0.isASCII} )
+                dispatchGroup.enter()
+                getEpisodes(link) { (result) in
+                    switch result {
+                    case .failure(let error) :
+                        print(error.localizedDescription)
+                        seasons.append(Season(number: title, episodes: []))
+                    case .success(let episodes) :
+                        seasons.append(Season(number: title, episodes: episodes))
+                    }
+                    dispatchGroup.leave()
+                }
+            }
+            dispatchGroup.notify(queue: DispatchQueue.main, execute: {
+                completed(.success(seasons))
+            })
+        } catch {
+            completed(.failure(.extractingData))
+        }
+    }
+    
+    
+    func getEpisodes(_ link: String, completed: @escaping (Result<[Episode], PAError>)->Void) {
+        
+        let showUrl = URL(string: link)
+        let task = URLSession.shared.dataTask(with: showUrl!) { (data, response, error) in
+            
+            guard let data = data else {
+                completed(.failure(.fetchHtml))
+                return
+            }
+            
+            guard let html = String(data: data, encoding: .ascii) else {
+                completed(.failure(.fetchHtml))
+                return
+            }
+            
+            guard let document = try? SwiftSoup.parse(html) else {
+                completed(.failure(.htmlParsing))
+                return
+            }
+            
+            do {
+                
+                let episodesDiv = try document.getElementById("epAll")
+                let links = try episodesDiv!.select("a").array()
+                var episodes: [Episode] = []
+                for link in links {
+                    let number = try String(link.text().filter {$0.isASCII})
+                    let link = try link.attr("href")
+                    episodes.append(Episode(number: number, link: link))
+                }
+                completed(.success(episodes))
+            } catch {
+                completed(.failure(.extractingData))
+            }
+            
+        }
+        
+        task.resume()
+    }
+    
+    
 }
 
 // ÙØ³ÙØ³Ù

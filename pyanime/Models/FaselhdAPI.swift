@@ -54,7 +54,7 @@ class FaselhdAPI {
                     let searchResultLink = try aTag!.attr("href")
                     var searchResultName = try aTag!.getElementsByClass("postInner").first()?.getElementsByClass("h1").text()
                     
-                    searchResultName = String((searchResultName?.filter {$0.isASCII}) ?? "")
+                    searchResultName = String((searchResultName?.filter {$0.isASCII}) ?? "").trimmingCharacters(in: .whitespaces)
                     
                     let searchResultImageLink = try aTag!.getElementsByClass("imgdiv-class").first()?.select("img").first()?.attr("src")
                     
@@ -171,7 +171,7 @@ class FaselhdAPI {
                 let id = try div!.attr("data-href")
                 let link = baseUrl + id
                 var title = try div!.getElementsByClass("title").text()
-                title = String(title.filter {$0.isASCII} )
+                title = String(title.filter {$0.isASCII} ).trimmingCharacters(in: .whitespaces)
                 dispatchGroup.enter()
                 getEpisodes(link) { (result) in
                     switch result {
@@ -219,7 +219,7 @@ class FaselhdAPI {
                 let links = try episodesDiv!.select("a").array()
                 var episodes: [Episode] = []
                 for link in links {
-                    let number = try String(link.text().filter {$0.isASCII})
+                    let number = try String(link.text().filter {$0.isASCII}).trimmingCharacters(in: .whitespaces)
                     let link = try link.attr("href")
                     episodes.append(Episode(number: number, link: link))
                 }
@@ -231,6 +231,110 @@ class FaselhdAPI {
         }
         
         task.resume()
+    }
+    
+    
+    
+    func getSteamUrl(_ link: String, completed: @escaping (Result<String, PAError>)->Void) {
+        
+        guard let showUrl = URL(string: link) else {
+            completed(.failure(.invalidUrl))
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: showUrl) { (data, response, error) in
+            
+            guard let data = data else {
+                completed(.failure(.fetchHtml))
+                return
+            }
+            
+            guard let html = String(data: data, encoding: .ascii) else {
+                completed(.failure(.fetchHtml))
+                return
+            }
+            
+            guard let document = try? SwiftSoup.parse(html) else {
+                completed(.failure(.htmlParsing))
+                return
+            }
+            
+            do {
+                
+                let frames = try document.select("iframe").array()
+                var frameLink = ""
+                for frame in frames {
+                    if try frame.attr("name") == "player_iframe" {
+                        frameLink = try frame.attr("src")
+                        break
+                    }
+                }
+                
+                self.getIframePage(frameLink) { (result) in
+                    switch result {
+                    case .failure(let error) :
+                        completed(.failure(error))
+                    case .success(let streamUrl) :
+                        completed(.success(streamUrl))
+                    }
+                }
+                
+            } catch {
+                completed(.failure(.extractingData))
+            }
+            
+        }
+        
+        task.resume()
+        
+        
+    }
+    
+    
+    func getIframePage(_ link: String, completed: @escaping (Result<String, PAError>)->Void) {
+        
+        guard let iframeUrl = URL(string: link) else {
+            completed(.failure(.invalidUrl))
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: iframeUrl) { (data, response, error) in
+            
+            guard let data = data else {
+                completed(.failure(.fetchHtml))
+                return
+            }
+            
+            guard let html = String(data: data, encoding: .ascii) else {
+                completed(.failure(.fetchHtml))
+                return
+            }
+            
+            guard let document = try? SwiftSoup.parse(html) else {
+                completed(.failure(.htmlParsing))
+                return
+            }
+            
+            do {
+                
+                var buttons = try document.getElementsByClass("hd_btn").array()
+                buttons.remove(at: 0)
+                try buttons.sort { (e1, e2) -> Bool in
+                    let q1 = try e1.text().dropLast()
+                    let q2 = try e2.text().dropLast()
+                    return Int(q1)! < Int(q2)!
+                }
+                
+                completed(.success(try buttons.last!.attr("data-url")))
+            } catch {
+                completed(.failure(.extractingData))
+            }
+            
+        }
+        
+        task.resume()
+        
+        
     }
     
     

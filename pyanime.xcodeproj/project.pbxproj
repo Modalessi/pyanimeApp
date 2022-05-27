@@ -14,6 +14,7 @@
 		5903D3AA2811390D003FA3ED /* EpisodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5903D3A92811390D003FA3ED /* EpisodeCell.swift */; };
 		59215FE3280D7D0000610DF4 /* ResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59215FE2280D7D0000610DF4 /* ResultCell.swift */; };
 		59215FE6280D7DA300610DF4 /* PAAvatarImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59215FE5280D7DA300610DF4 /* PAAvatarImageView.swift */; };
+		593AB73E283E3809007BEC58 /* FaselhdAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593AB73D283E3809007BEC58 /* FaselhdAPI.swift */; };
 		59874D93280C968C00333EC3 /* GogoanimeAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59874D92280C968C00333EC3 /* GogoanimeAPI.swift */; };
 		59C3C0BB2801309600132FF0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3C0BA2801309600132FF0 /* AppDelegate.swift */; };
 		59C3C0BD2801309600132FF0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3C0BC2801309600132FF0 /* SceneDelegate.swift */; };
@@ -41,6 +42,7 @@
 		5903D3A92811390D003FA3ED /* EpisodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeCell.swift; sourceTree = "<group>"; };
 		59215FE2280D7D0000610DF4 /* ResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCell.swift; sourceTree = "<group>"; };
 		59215FE5280D7DA300610DF4 /* PAAvatarImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PAAvatarImageView.swift; sourceTree = "<group>"; };
+		593AB73D283E3809007BEC58 /* FaselhdAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaselhdAPI.swift; sourceTree = "<group>"; };
 		59874D92280C968C00333EC3 /* GogoanimeAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GogoanimeAPI.swift; sourceTree = "<group>"; };
 		59C3C0B72801309600132FF0 /* pyanime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pyanime.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		59C3C0BA2801309600132FF0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				59E87187280D57E60020B884 /* PAError.swift */,
 				5903D3A02810614A003FA3ED /* Anime.swift */,
 				5903D3A3281061E2003FA3ED /* Episode.swift */,
+				593AB73D283E3809007BEC58 /* FaselhdAPI.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 				59C3C0BF2801309600132FF0 /* SearchVC.swift in Sources */,
 				59C3C0BB2801309600132FF0 /* AppDelegate.swift in Sources */,
 				59C3C0D928013B1100132FF0 /* ResultsVC.swift in Sources */,
+				593AB73E283E3809007BEC58 /* FaselhdAPI.swift in Sources */,
 				59E87188280D57E60020B884 /* PAError.swift in Sources */,
 				59874D93280C968C00333EC3 /* GogoanimeAPI.swift in Sources */,
 				5903D3AA2811390D003FA3ED /* EpisodeCell.swift in Sources */,

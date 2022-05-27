@@ -29,7 +29,7 @@ class ResultsVC: UIViewController {
     
     func getSearchResults() {
         
-        GogoanimeAPI.shared.search(for: searchQuery) { (result) in
+        FaselhdAPI.shared.search(for: searchQuery) { (result) in
             switch result {
             case .success(let results) :
                 self.results = results
@@ -47,6 +47,7 @@ class ResultsVC: UIViewController {
     
     func procedsToAnimeVC(with selectedSearchResult: SearchResult) {
         let animeVC = AnimeVC()
+        animeVC.title = selectedSearchResult.name
         animeVC.selectedSearchResult = selectedSearchResult
         navigationController?.pushViewController(animeVC, animated: true)
     }

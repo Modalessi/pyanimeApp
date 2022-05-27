@@ -68,11 +68,11 @@ class GogoanimeAPI {
                 }
                 
             } catch {
-                return completed(.failure(.extractingData))
+                completed(.failure(.extractingData))
             }
             
             
-            return completed(.success(results))
+            completed(.success(results))
         }
         
         task.resume()

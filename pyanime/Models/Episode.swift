@@ -7,13 +7,7 @@
 
 import Foundation
 
-class Episode {
+struct Episode {
     let number: String
-    let link: String
-    
-    init(number: String, link: String) {
-        self.number = number
-        self.link = link
-    }
-    
+    let link: String    
 }

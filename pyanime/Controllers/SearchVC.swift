@@ -14,7 +14,6 @@ class SearchVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         layoutUI()
         navigationController?.navigationBar.prefersLargeTitles = true
         // Do any additional setup after loading the view.
@@ -40,6 +39,9 @@ class SearchVC: UIViewController {
         
         searchTextField.placeholder = "Search Query"
         searchTextField.textAlignment = .center
+        searchTextField.layer.borderWidth = 1
+        searchTextField.layer.cornerRadius = 15
+        searchTextField.layer.borderColor = UIColor.secondarySystemFill.cgColor
         
         searchTextField.translatesAutoresizingMaskIntoConstraints = false
         
@@ -47,6 +49,7 @@ class SearchVC: UIViewController {
         NSLayoutConstraint.activate([
             searchTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -20),
             searchTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            searchTextField.heightAnchor.constraint(equalToConstant: 50),
             searchTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             searchTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30)
         ])

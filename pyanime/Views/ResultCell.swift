@@ -68,6 +68,7 @@ class ResultCell: UICollectionViewCell {
     
     private func configureResultnameLabel() {
         
+        resultNameLabel.textColor = .white
         resultNameLabel.numberOfLines = 2
         addSubview(resultNameLabel)
         

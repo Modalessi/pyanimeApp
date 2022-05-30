@@ -7,7 +7,7 @@
 
 
 
-class Season {
+struct Season {
     
     var number: String
     var episodes: [Episode]

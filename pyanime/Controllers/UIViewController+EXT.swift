@@ -7,6 +7,8 @@
 
 import UIKit
 
+fileprivate var containerView: UIView!
+
 extension UIViewController {
     
     func presentPAAlertOnMainThread(title: String, message: String, buttonTitle: String?) {
@@ -18,6 +20,35 @@ extension UIViewController {
             self.present(alertViewController, animated: true, completion: nil)
         }
         
+    }
+    
+    
+    func showLoadingIndicator() {
+        containerView = UIView(frame: view.bounds)
+        view.addSubview(containerView)
+        containerView.backgroundColor = .systemBackground
+        containerView.alpha = 0
+        
+        UIView.animate(withDuration: 0.25) { containerView.alpha = 0.8 }
+        
+        let acitivityIndicator = UIActivityIndicatorView(style: .large)
+        containerView.addSubview(acitivityIndicator)
+        acitivityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            acitivityIndicator.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            acitivityIndicator.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
+        ])
+        
+        acitivityIndicator.startAnimating()
+    }
+    
+    
+    func dismisLoadingIndicator() {
+        DispatchQueue.main.async {
+            containerView.removeFromSuperview()
+            containerView = nil
+        }
     }
     
 }

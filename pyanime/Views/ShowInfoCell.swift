@@ -1,8 +1,8 @@
 //
-//  ShowInfoCell.swift
+//  AnimeInfoCell.swift
 //  pyanime
 //
-//  Created by Mohammed Alessi on 27/05/2022.
+//  Created by Mohammed Alessi on 17/05/2022.
 //
 
 import UIKit
@@ -10,35 +10,34 @@ import UIKit
 class ShowInfoCell: UITableViewCell {
     
     
-    static let reuseID: String = "showInfoCell"
+    static let reuseID = "ShowInfoCell"
     
-    let resultImageView = PAAvatarImageView(frame: .zero)
-    let gradientView = UIView()
-    let gradientLayer = CAGradientLayer()
     let mainView = UIView()
+    let titleLabel = PATitleLabel(textAlignment: .left, fontSize: 22)
+    let plotLabel = PABodyLabel(textAlignment: .left)
+    let posterImageView = PAAvatarImageView(frame: .zero)
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        configureMainView()
-        configureResultImageView()
-        configureGradientView()
+        selectionStyle = .none
+        configureUI()
     }
-    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     
-    func set(_ show: Show) {
-        DispatchQueue.main.async {
-            self.resultImageView.downloadImage(from: show.imageUrl)
-        }
+    func configureUI() {
+        configureMainView()
+        configurePosterImageView()
+        configureTitleLabel()
+        configurePlotLabel()
     }
     
     
-    private func configureMainView() {
+    func configureMainView() {
         
         mainView.layer.cornerRadius = 10
         mainView.backgroundColor = .secondarySystemBackground
@@ -55,45 +54,49 @@ class ShowInfoCell: UITableViewCell {
     }
     
     
-    private func configureGradientView() {
-        
-        gradientView.translatesAutoresizingMaskIntoConstraints = false
-        
-        mainView.addSubview(gradientView)
+    func configurePosterImageView() {
+        mainView.addSubview(posterImageView)
         
         NSLayoutConstraint.activate([
-            gradientView.topAnchor.constraint(equalTo: resultImageView.topAnchor),
-            gradientView.leadingAnchor.constraint(equalTo: resultImageView.leadingAnchor),
-            gradientView.trailingAnchor.constraint(equalTo: resultImageView.trailingAnchor),
-            gradientView.bottomAnchor.constraint(equalTo: resultImageView.bottomAnchor)
+            posterImageView.topAnchor.constraint(equalTo: mainView.topAnchor, constant: 5),
+            posterImageView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 5),
+            posterImageView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: -5),
+            posterImageView.widthAnchor.constraint(equalTo: posterImageView.heightAnchor, multiplier: 0.6)
         ])
         
     }
     
     
-    private func configureResultImageView() {
-        
-        mainView.addSubview(resultImageView)
-        
+    func configureTitleLabel() {
+        mainView.addSubview(titleLabel)
+        titleLabel.numberOfLines = 2
         NSLayoutConstraint.activate([
-            resultImageView.topAnchor.constraint(equalTo: mainView.topAnchor, constant: 5),
-            resultImageView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 10),
-            resultImageView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -10),
-            resultImageView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: 5)
+            titleLabel.topAnchor.constraint(equalTo: posterImageView.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: 5),
+            titleLabel.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -5),
+            titleLabel.heightAnchor.constraint(equalToConstant: 50)
         ])
-        
     }
     
     
-    func drawLayer() {
-        gradientLayer.frame = gradientView.bounds
-        gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
-        gradientView.layer.insertSublayer(gradientLayer, at: 0)
+    func configurePlotLabel() {
+        plotLabel.numberOfLines = 0
+        plotLabel.font = UIFont.systemFont(ofSize: 15)
+        mainView.addSubview(plotLabel)
+        NSLayoutConstraint.activate([
+            plotLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
+            plotLabel.leadingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: 5),
+            plotLabel.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -5),
+            plotLabel.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: -5)
+        ])
     }
-
-    override func layoutSublayers(of layer: CALayer) {
-        super.layoutSublayers(of: layer)
-        drawLayer()
+    
+    
+    func set(show: Show) {
+        titleLabel.text = show.name
+        plotLabel.text = "this is the plot of the stroy it will go here so the user can read it and then decide either to watch on not"
+        posterImageView.downloadImage(from: show.imageUrl)
     }
+    
     
 }

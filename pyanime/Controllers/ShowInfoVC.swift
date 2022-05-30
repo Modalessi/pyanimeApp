@@ -22,6 +22,10 @@ class ShowInfoVC: UIViewController {
         configureEpisodesTableView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        showLoadingIndicator()
+    }
     
     func getShow() {
         FaselhdAPI.shared.getShow(for: selectedSearchResult) { (result) in
@@ -34,9 +38,11 @@ class ShowInfoVC: UIViewController {
                         Int(s1.number)! < Int(s2.number)!
                     })
                     self.episodesTableView.reloadData()
+                    self.dismisLoadingIndicator()
                 }
             case .failure(let error) :
                 DispatchQueue.main.async {
+                    self.dismisLoadingIndicator()
                     self.presentPAAlertOnMainThread(title: "Ooops", message: error.rawValue, buttonTitle: "Ok")
                 }
             }
@@ -103,25 +109,32 @@ class ShowInfoVC: UIViewController {
 
 extension ShowInfoVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return self.view.frame.height * 0.08
+        if indexPath.row == 0 && indexPath.section == 0 {
+            return self.view.frame.height * 0.3
+        } else {
+            return self.view.frame.height * 0.08
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         if let seasons = show.seasons {
-            return seasons.count
+            return seasons.count + 1
         }
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // one for the info cell
+        if section == 0 {
+            return 1
+        }
         
         if show.isMovie {
             return 1
         }
         
         if let seasons = show.seasons {
-            return seasons[section].episodes.count
+            return seasons[section - 1].episodes.count
         } else {
             if let episodes = show.episodes {
                 return episodes.count
@@ -140,7 +153,42 @@ extension ShowInfoVC: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let hasSeasons = show.seasons != nil
+        let sectionView: UIView = UIView()
+        let sectionTitleLabel = PATitleLabel(textAlignment: .center, fontSize: 18)
+        sectionTitleLabel.layer.cornerRadius = 10
+        sectionTitleLabel.backgroundColor = .secondarySystemBackground
+        sectionTitleLabel.clipsToBounds = true
+        
+        
+        sectionTitleLabel.text = hasSeasons ? "season \(show.seasons![section - 1].number)" : "Episodes"
+        sectionView.addSubview(sectionTitleLabel)
+        NSLayoutConstraint.activate([
+            sectionTitleLabel.topAnchor.constraint(equalTo: sectionView.topAnchor),
+            sectionTitleLabel.bottomAnchor.constraint(equalTo: sectionView.bottomAnchor),
+            sectionTitleLabel.leadingAnchor.constraint(equalTo: sectionView.leadingAnchor, constant: 10),
+            sectionTitleLabel.trailingAnchor.constraint(equalTo: sectionView.trailingAnchor, constant: -10)
+        ])
+        return sectionView
+    }
+    
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return section == 0 ? CGFloat.leastNonzeroMagnitude : 40
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if indexPath.row == 0 && indexPath.section == 0 {
+            let infoCell = tableView.dequeueReusableCell(withIdentifier: ShowInfoCell.reuseID) as! ShowInfoCell
+            infoCell.set(show: show)
+            
+            return infoCell
+        }
+        
         
         let episodeCell = tableView.dequeueReusableCell(withIdentifier: EpisodeCell.reuseID) as! EpisodeCell
                     
@@ -150,7 +198,7 @@ extension ShowInfoVC: UITableViewDelegate, UITableViewDataSource {
         if show.isMovie {
             episodeCell.titleLable.text = "Watch Movie"
         } else if hasSeasons {
-            episodeCell.titleLable.text = "Episode \(show.seasons![indexPath.section].episodes[indexPath.row].number)"
+            episodeCell.titleLable.text = "Episode \(show.seasons![indexPath.section - 1].episodes[indexPath.row].number)"
         } else {
             episodeCell.titleLable.text = "Episode \(show.episodes![indexPath.row].number)"
         }

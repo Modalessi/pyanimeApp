@@ -19,6 +19,7 @@ class EpisodeCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectedBackgroundView = nil
+        selectionStyle = .none
         configureMainView()
         configureTitleLable()
     }
@@ -31,7 +32,7 @@ class EpisodeCell: UITableViewCell {
     func configureMainView() {
         
         mainView.layer.cornerRadius = 10
-        mainView.backgroundColor = .secondarySystemBackground
+        mainView.backgroundColor = .tertiarySystemBackground
         mainView.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(mainView)
@@ -55,6 +56,15 @@ class EpisodeCell: UITableViewCell {
             titleLable.trailingAnchor.constraint(equalTo: mainView.trailingAnchor)
         ])
         
+    }
+    
+    
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        if highlighted {
+            mainView.backgroundColor = .quaternarySystemFill
+        } else {
+            mainView.backgroundColor = .tertiarySystemBackground
+        }
     }
     
 }

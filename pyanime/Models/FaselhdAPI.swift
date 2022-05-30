@@ -10,8 +10,9 @@ import SwiftSoup
 class FaselhdAPI {
     
     static let baseUrl: URL = URL(string: "https://www.faselhd.top/")!
-    
     static let shared: FaselhdAPI = FaselhdAPI()
+    
+    var cache = NSCache<NSString, UIImage>()
     
     func search(for searchQuery: String, completed: @escaping (Result<[SearchResult], PAError>)->Void) {
         var searchUrlComponents = URLComponents(url: FaselhdAPI.baseUrl, resolvingAgainstBaseURL: true)

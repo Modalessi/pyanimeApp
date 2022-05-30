@@ -11,7 +11,7 @@ class PAAvatarImageView: UIImageView {
     
     let placeholderImage = UIImage(named: "imagePlaceholder")!
     
-    let cache = GogoanimeAPI.shared.cache
+    let cache = FaselhdAPI.shared.cache
     
     override init(frame: CGRect) {
         super.init(frame: frame)

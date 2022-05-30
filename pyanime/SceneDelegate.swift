@@ -28,7 +28,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func createNavigationController()-> UINavigationController {
         let searchVC = SearchVC()
         searchVC.title = "Search"
-        
+        searchVC.view.backgroundColor = .systemBackground
         let navigationController = UINavigationController(rootViewController: searchVC)
         
         return navigationController

@@ -45,7 +45,6 @@ class FaselhdAPI {
             var results: [SearchResult] = []
             
             do {
-                
                 let resultsContainer = try document.getElementById("postList")
                 let resultsDivs = try resultsContainer!.getElementsByClass("col-xl-2 col-lg-2 col-md-3 col-sm-3")
                 
@@ -57,7 +56,9 @@ class FaselhdAPI {
                     
                     searchResultName = String((searchResultName?.filter {$0.isASCII}) ?? "").trimmingCharacters(in: .whitespaces)
                     
-                    let searchResultImageLink = try aTag!.getElementsByClass("imgdiv-class").first()?.select("img").first()?.attr("src")
+                    let searchResultImageLink = try aTag!.getElementsByClass("imgdiv-class").first()?.select("img").first()?.attr("data-src")
+                    
+                    
                     
                     results.append(SearchResult(name: searchResultName!, link: searchResultLink, imageUrl: searchResultImageLink!))
                 }
@@ -102,34 +103,48 @@ class FaselhdAPI {
             }
             
             let show = Show()
-                        
-            if self.isMovie(document) {
-                show.isMovie = true
-                completed(.success(show))
-            } else {
-                
-                if self.hasSeasons(document) {
-                    self.getSeasons(document) { (result) in
-                        switch result {
-                        case .success(let seasons) :
-                            completed(.success(Show(from: searchResult, isMovie: false, seasons: seasons, episodes: nil)))
-                        case .failure(let error) :
-                            completed(.failure(error))
-                        }
-                    }
-                } else {
-                    self.getEpisodes(showUrl.description) { (result) in
-                        switch result {
-                        case .failure(let error) :
-                            completed(.failure(error))
-                        case .success(let episodes) :
-                            completed(.success(Show(from: searchResult, isMovie: false, seasons: nil, episodes: episodes)))
-                        }
-                    }
-                    
+            var imdbDeatils = ImdbShowDetails()
+            let dispatchGroup = DispatchGroup()
+            
+            dispatchGroup.enter()
+            ImdbAPI.shared.getShowDetails(for: searchResult) { (result) in
+                switch result {
+                case .success(let imdbShowDetails) :
+                    imdbDeatils = imdbShowDetails
+                case .failure(let error) :
+                    completed(.failure(error))
                 }
-                
+                dispatchGroup.leave()
             }
+            
+            
+            dispatchGroup.notify(queue: DispatchQueue.main, execute: {
+                if self.isMovie(document) {
+                    show.isMovie = true
+                    completed(.success(Show(from: searchResult, imdbDetails: imdbDeatils, isMovie: true, seasons: nil, episodes: nil)))
+                } else {
+                    
+                    if self.hasSeasons(document) {
+                        self.getSeasons(document) { (result) in
+                            switch result {
+                            case .success(let seasons) :
+                                completed(.success(Show(from: searchResult, imdbDetails: imdbDeatils, isMovie: false, seasons: seasons, episodes: nil)))
+                            case .failure(let error) :
+                                completed(.failure(error))
+                            }
+                        }
+                    } else {
+                        self.getEpisodes(showUrl.description) { (result) in
+                            switch result {
+                            case .failure(let error) :
+                                completed(.failure(error))
+                            case .success(let episodes) :
+                                completed(.success(Show(from: searchResult, imdbDetails: imdbDeatils, isMovie: false, seasons: nil, episodes: episodes)))
+                            }
+                        }
+                    }
+                }
+            })
             
         }
         

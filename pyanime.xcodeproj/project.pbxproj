@@ -16,6 +16,8 @@
 		593AB7412840599D007BEC58 /* ShowInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593AB7402840599D007BEC58 /* ShowInfoVC.swift */; };
 		593AB74428405A02007BEC58 /* Show.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593AB74328405A02007BEC58 /* Show.swift */; };
 		593AB74728405A65007BEC58 /* Season.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593AB74628405A65007BEC58 /* Season.swift */; };
+		598F8ED528458244002AAC83 /* ImdbAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598F8ED428458244002AAC83 /* ImdbAPI.swift */; };
+		598F8ED82845833B002AAC83 /* ImdbShowDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598F8ED72845833B002AAC83 /* ImdbShowDetails.swift */; };
 		59C3C0BB2801309600132FF0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3C0BA2801309600132FF0 /* AppDelegate.swift */; };
 		59C3C0BD2801309600132FF0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3C0BC2801309600132FF0 /* SceneDelegate.swift */; };
 		59C3C0BF2801309600132FF0 /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3C0BE2801309600132FF0 /* SearchVC.swift */; };
@@ -44,6 +46,8 @@
 		593AB7402840599D007BEC58 /* ShowInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowInfoVC.swift; sourceTree = "<group>"; };
 		593AB74328405A02007BEC58 /* Show.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Show.swift; sourceTree = "<group>"; };
 		593AB74628405A65007BEC58 /* Season.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Season.swift; sourceTree = "<group>"; };
+		598F8ED428458244002AAC83 /* ImdbAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImdbAPI.swift; sourceTree = "<group>"; };
+		598F8ED72845833B002AAC83 /* ImdbShowDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImdbShowDetails.swift; sourceTree = "<group>"; };
 		59C3C0B72801309600132FF0 /* pyanime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pyanime.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		59C3C0BA2801309600132FF0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		59C3C0BC2801309600132FF0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -153,6 +157,8 @@
 				593AB73D283E3809007BEC58 /* FaselhdAPI.swift */,
 				593AB74328405A02007BEC58 /* Show.swift */,
 				593AB74628405A65007BEC58 /* Season.swift */,
+				598F8ED428458244002AAC83 /* ImdbAPI.swift */,
+				598F8ED72845833B002AAC83 /* ImdbShowDetails.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -290,11 +296,13 @@
 				593AB7412840599D007BEC58 /* ShowInfoVC.swift in Sources */,
 				59C3C0E928013D6300132FF0 /* PAButton.swift in Sources */,
 				59C3C0DF28013CEC00132FF0 /* PAAlertViewController.swift in Sources */,
+				598F8ED82845833B002AAC83 /* ImdbShowDetails.swift in Sources */,
 				593AB74428405A02007BEC58 /* Show.swift in Sources */,
 				59C3C0DC28013CB000132FF0 /* UIViewController+EXT.swift in Sources */,
 				59EC7AF42833E46B00C913BF /* ShowInfoCell.swift in Sources */,
 				59C3C0D42801363600132FF0 /* PASecondaryLabel.swift in Sources */,
 				59C3C0BF2801309600132FF0 /* SearchVC.swift in Sources */,
+				598F8ED528458244002AAC83 /* ImdbAPI.swift in Sources */,
 				59C3C0BB2801309600132FF0 /* AppDelegate.swift in Sources */,
 				59C3C0D928013B1100132FF0 /* ResultsVC.swift in Sources */,
 				593AB73E283E3809007BEC58 /* FaselhdAPI.swift in Sources */,

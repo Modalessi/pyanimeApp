@@ -24,15 +24,16 @@ class ShowInfoVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        showLoadingIndicator()
     }
     
     func getShow() {
+        showLoadingIndicator()
         FaselhdAPI.shared.getShow(for: selectedSearchResult) { (result) in
             
             switch result {
             case .success(let show) :
                 self.show = show
+                
                 DispatchQueue.main.async {
                     show.seasons?.sort(by: { (s1, s2) -> Bool in
                         Int(s1.number)! < Int(s2.number)!
@@ -51,7 +52,6 @@ class ShowInfoVC: UIViewController {
     }
     
     func configureEpisodesTableView() {
-        
         view.addSubview(episodesTableView)
         episodesTableView.rowHeight = 75
         episodesTableView.frame = view.bounds
@@ -110,7 +110,7 @@ class ShowInfoVC: UIViewController {
 extension ShowInfoVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 && indexPath.section == 0 {
-            return self.view.frame.height * 0.3
+            return self.view.frame.height * 0.7
         } else {
             return self.view.frame.height * 0.08
         }
@@ -160,7 +160,7 @@ extension ShowInfoVC: UITableViewDelegate, UITableViewDataSource {
         let sectionView: UIView = UIView()
         let sectionTitleLabel = PATitleLabel(textAlignment: .center, fontSize: 18)
         sectionTitleLabel.layer.cornerRadius = 10
-        sectionTitleLabel.backgroundColor = .secondarySystemBackground
+        sectionTitleLabel.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
         sectionTitleLabel.clipsToBounds = true
         
         
@@ -183,9 +183,9 @@ extension ShowInfoVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if indexPath.row == 0 && indexPath.section == 0 {
+            
             let infoCell = tableView.dequeueReusableCell(withIdentifier: ShowInfoCell.reuseID) as! ShowInfoCell
             infoCell.set(show: show)
-            
             return infoCell
         }
         

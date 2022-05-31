@@ -13,9 +13,9 @@ class ShowInfoCell: UITableViewCell {
     static let reuseID = "ShowInfoCell"
     
     let mainView = UIView()
-    let titleLabel = PATitleLabel(textAlignment: .left, fontSize: 22)
     let plotLabel = PABodyLabel(textAlignment: .left)
     let posterImageView = PAAvatarImageView(frame: .zero)
+    let gradientLayer = CAGradientLayer()
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -32,7 +32,6 @@ class ShowInfoCell: UITableViewCell {
     func configureUI() {
         configureMainView()
         configurePosterImageView()
-        configureTitleLabel()
         configurePlotLabel()
     }
     
@@ -58,43 +57,43 @@ class ShowInfoCell: UITableViewCell {
         mainView.addSubview(posterImageView)
         
         NSLayoutConstraint.activate([
-            posterImageView.topAnchor.constraint(equalTo: mainView.topAnchor, constant: 5),
-            posterImageView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 5),
-            posterImageView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: -5),
-            posterImageView.widthAnchor.constraint(equalTo: posterImageView.heightAnchor, multiplier: 0.6)
+            posterImageView.centerXAnchor.constraint(equalTo: mainView.centerXAnchor),
+            posterImageView.centerYAnchor.constraint(equalTo: mainView.centerYAnchor),
+            posterImageView.heightAnchor.constraint(equalTo: mainView.heightAnchor),
+            posterImageView.widthAnchor.constraint(equalTo: mainView.widthAnchor)
         ])
         
-    }
-    
-    
-    func configureTitleLabel() {
-        mainView.addSubview(titleLabel)
-        titleLabel.numberOfLines = 2
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: posterImageView.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: 5),
-            titleLabel.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -5),
-            titleLabel.heightAnchor.constraint(equalToConstant: 50)
-        ])
     }
     
     
     func configurePlotLabel() {
         plotLabel.numberOfLines = 0
         plotLabel.font = UIFont.systemFont(ofSize: 15)
+        plotLabel.textColor = .white
+        plotLabel.textAlignment = .center
         mainView.addSubview(plotLabel)
         NSLayoutConstraint.activate([
-            plotLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
-            plotLabel.leadingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: 5),
+            plotLabel.topAnchor.constraint(equalTo: mainView.centerYAnchor),
+            plotLabel.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 5),
             plotLabel.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -5),
             plotLabel.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: -5)
         ])
     }
     
+    func drawLayer() {
+        gradientLayer.frame = posterImageView.bounds
+        gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
+        posterImageView.layer.insertSublayer(gradientLayer, at: 0)
+    }
+
+    override func layoutSublayers(of layer: CALayer) {
+        super.layoutSublayers(of: layer)
+        drawLayer()
+    }
+    
     
     func set(show: Show) {
-        titleLabel.text = show.name
-        plotLabel.text = "this is the plot of the stroy it will go here so the user can read it and then decide either to watch on not"
+        plotLabel.text = show.imdbDetails.description
         posterImageView.downloadImage(from: show.imageUrl)
     }
     

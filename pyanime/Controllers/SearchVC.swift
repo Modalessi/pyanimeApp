@@ -15,6 +15,8 @@ class SearchVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutUI()
+        configureViewController()
+        searchTextField.delegate = self
         navigationController?.navigationBar.prefersLargeTitles = true
         // Do any additional setup after loading the view.
     }
@@ -32,6 +34,19 @@ class SearchVC: UIViewController {
     func pushResultsVC() {
         let resultsVC = ResultsVC(searchQuery: searchTextField.text!)
         navigationController?.pushViewController(resultsVC, animated: true)
+    }
+    
+    
+    func configureViewController() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(viewTouched(_:)))
+        tapGesture.numberOfTapsRequired = 1
+        tapGesture.numberOfTouchesRequired = 1
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    
+    @objc func viewTouched(_ gesture: UITapGestureRecognizer) {
+        searchTextField.resignFirstResponder()
     }
     
     
@@ -70,3 +85,12 @@ class SearchVC: UIViewController {
     
 }
 
+
+extension SearchVC: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        searchButtonTouched()
+        
+        return true
+    }
+}

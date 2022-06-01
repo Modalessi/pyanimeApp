@@ -24,10 +24,10 @@ class ShowInfoVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        showLoadingIndicator()
     }
     
     func getShow() {
-        showLoadingIndicator()
         FaselhdAPI.shared.getShow(for: selectedSearchResult) { (result) in
             
             switch result {
@@ -79,26 +79,6 @@ class ShowInfoVC: UIViewController {
             player.play()
         }
         
-    }
-    
-    
-    func printData() {
-        print(show.isMovie)
-        if let seasons = show.seasons {
-            for season in seasons {
-                print("season [\(season.number)] -----------")
-                
-                for episode in season.episodes {
-                    print("     - episode [\(episode.number)] - \(episode.link)")
-                }
-            }
-        }
-
-        if let episodes = show.episodes {
-            for episode in episodes {
-                print("episode [\(episode.number)] - \(episode.link)")
-            }
-        }
     }
     
     
@@ -213,12 +193,13 @@ extension ShowInfoVC: UITableViewDelegate, UITableViewDataSource {
         if show.isMovie {
             link = show.link
         } else if hasSeasons {
-            link = show.seasons![indexPath.section].episodes[indexPath.row].link
+            link = show.seasons![indexPath.section - 1].episodes[indexPath.row].link
         } else {
             link = show.episodes![indexPath.row].link
         }
-        
+        showLoadingIndicator()
         FaselhdAPI.shared.getSteamUrl(link) { (result) in
+            self.dismisLoadingIndicator()
             switch result {
             case .failure(let error) :
                 print(error.rawValue)

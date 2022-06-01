@@ -39,10 +39,15 @@ class ImdbAPI {
                 return
             }
             
+            
             do {
                 
                 let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)  as! [String : Any]
-                let results = json["search"] as! [[String : Any]]
+                print(json)
+                guard let results = json["search"] as? [[String : Any]] else {
+                    completed(.failure(.extractingData))
+                    return
+                }
                 let firstResult = results[0]
                 let imdbId = firstResult["imdbid"] as! String
                 print("imdbid: \(imdbId)")

@@ -16,6 +16,7 @@ class ResultCell: UICollectionViewCell {
     let resultNameLabel = PATitleLabel(textAlignment: .center, fontSize: 16)
     let gradientView = UIView()
     let gradientLayer = CAGradientLayer()
+    var backgroundMaskedView = GradientView()
     
     
     override init(frame: CGRect) {
@@ -23,6 +24,7 @@ class ResultCell: UICollectionViewCell {
         configureResultImageView()
         configureGradientView()
         configureResultnameLabel()
+//        drawLayer()
     }
     
     required init?(coder: NSCoder) {
@@ -38,15 +40,15 @@ class ResultCell: UICollectionViewCell {
     
     private func configureGradientView() {
         
-        gradientView.translatesAutoresizingMaskIntoConstraints = false
+        backgroundMaskedView.translatesAutoresizingMaskIntoConstraints = false
         
-        addSubview(gradientView)
+        resultImageView.addSubview(backgroundMaskedView)
         
         NSLayoutConstraint.activate([
-            gradientView.topAnchor.constraint(equalTo: resultImageView.topAnchor),
-            gradientView.leadingAnchor.constraint(equalTo: resultImageView.leadingAnchor),
-            gradientView.trailingAnchor.constraint(equalTo: resultImageView.trailingAnchor),
-            gradientView.bottomAnchor.constraint(equalTo: resultImageView.bottomAnchor)
+            backgroundMaskedView.topAnchor.constraint(equalTo: resultImageView.topAnchor),
+            backgroundMaskedView.leadingAnchor.constraint(equalTo: resultImageView.leadingAnchor),
+            backgroundMaskedView.trailingAnchor.constraint(equalTo: resultImageView.trailingAnchor),
+            backgroundMaskedView.bottomAnchor.constraint(equalTo: resultImageView.bottomAnchor)
         ])
         
     }
@@ -54,7 +56,7 @@ class ResultCell: UICollectionViewCell {
     
     private func configureResultImageView() {
         
-        addSubview(resultImageView)
+        self.contentView.addSubview(resultImageView)
         
         NSLayoutConstraint.activate([
             resultImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
@@ -70,7 +72,7 @@ class ResultCell: UICollectionViewCell {
         
         resultNameLabel.textColor = .white
         resultNameLabel.numberOfLines = 2
-        addSubview(resultNameLabel)
+        self.contentView.addSubview(resultNameLabel)
         
         NSLayoutConstraint.activate([
             resultNameLabel.bottomAnchor.constraint(equalTo: resultImageView.bottomAnchor, constant: -20),
@@ -80,17 +82,21 @@ class ResultCell: UICollectionViewCell {
         ])
         
     }
+//
+//    override func layoutSubviews() {
+//        gradientLayer.frame = gradientView.bounds
+//    }
+//
+//    func drawLayer() {
+//        gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
+//        gradientView.layer.insertSublayer(gradientLayer, at: 0)
+//    }
+//
+//    override func layoutSublayers(of layer: CALayer) {
+//        super.layoutSublayers(of: layer)
+//        drawLayer()
+//    }
+//
     
-    
-    func drawLayer() {
-        gradientLayer.frame = gradientView.bounds
-        gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
-        gradientView.layer.insertSublayer(gradientLayer, at: 0)
-    }
-
-    override func layoutSublayers(of layer: CALayer) {
-        super.layoutSublayers(of: layer)
-        drawLayer()
-    }
     
 }

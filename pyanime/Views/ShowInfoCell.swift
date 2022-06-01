@@ -13,10 +13,18 @@ class ShowInfoCell: UITableViewCell {
     static let reuseID = "ShowInfoCell"
     
     let mainView = UIView()
-    let plotLabel = PABodyLabel(textAlignment: .left)
+    let plotLabel = PABodyLabel(textAlignment: .center)
     let posterImageView = PAAvatarImageView(frame: .zero)
     let gradientLayer = CAGradientLayer()
-    
+    let genersLabel = PABodyLabel(textAlignment: .center)
+    let releaseYearLabel = PABodyLabel(textAlignment: .center)
+    let releaseYearIcon = UIImageView(image: UIImage(systemName: "calendar"))
+    let runtimeLabel = PABodyLabel(textAlignment: .center)
+    let runtimeIcon = UIImageView(image: UIImage(systemName: "clock.arrow.circlepath"))
+    let ratingLabel = PABodyLabel(textAlignment: .center)
+    let ratingIcon = UIImageView(image: UIImage(systemName: "star"))
+    let detailsStackView = UIStackView()
+    let miniDetailsStackView = UIStackView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -33,6 +41,7 @@ class ShowInfoCell: UITableViewCell {
         configureMainView()
         configurePosterImageView()
         configurePlotLabel()
+//        configureDetailsStackView()
     }
     
     
@@ -70,19 +79,63 @@ class ShowInfoCell: UITableViewCell {
         plotLabel.numberOfLines = 0
         plotLabel.font = UIFont.systemFont(ofSize: 15)
         plotLabel.textColor = .white
-        plotLabel.textAlignment = .center
         mainView.addSubview(plotLabel)
         NSLayoutConstraint.activate([
             plotLabel.topAnchor.constraint(equalTo: mainView.centerYAnchor),
             plotLabel.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 5),
             plotLabel.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -5),
-            plotLabel.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: -5)
         ])
     }
     
+    
+    func configureDetailsStackView() {
+        
+        detailsStackView.addArrangedSubview(genersLabel)
+        detailsStackView.addArrangedSubview(miniDetailsStackView)
+        
+        miniDetailsStackView.addArrangedSubview(releaseYearIcon)
+        miniDetailsStackView.addArrangedSubview(releaseYearLabel)
+        
+        miniDetailsStackView.addArrangedSubview(runtimeIcon)
+        miniDetailsStackView.addArrangedSubview(runtimeLabel)
+        
+        miniDetailsStackView.addArrangedSubview(ratingIcon)
+        miniDetailsStackView.addArrangedSubview(ratingLabel)
+        
+        
+        detailsStackView.alignment = .center
+        detailsStackView.axis = .vertical
+        detailsStackView.spacing = 10
+        
+        miniDetailsStackView.alignment = .center
+        miniDetailsStackView.axis = .horizontal
+        miniDetailsStackView.spacing = 10
+        
+        
+        releaseYearIcon.tintColor = .white
+        runtimeIcon.tintColor = .white
+        ratingIcon.tintColor = .white
+        
+        
+        mainView.addSubview(detailsStackView)
+        detailsStackView.translatesAutoresizingMaskIntoConstraints = false
+        miniDetailsStackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            detailsStackView.topAnchor.constraint(equalTo: plotLabel.bottomAnchor, constant: 5),
+            detailsStackView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 10),
+            detailsStackView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -10),
+            detailsStackView.heightAnchor.constraint(equalToConstant: 60)
+        ])
+        
+    }
+    
+    
     func drawLayer() {
-        gradientLayer.frame = posterImageView.bounds
+        // add gradient layer above the poster image view
         gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
+        gradientLayer.locations = [0.0, 0.75]
+        gradientLayer.frame = posterImageView.bounds
         posterImageView.layer.insertSublayer(gradientLayer, at: 0)
     }
 
@@ -93,7 +146,13 @@ class ShowInfoCell: UITableViewCell {
     
     
     func set(show: Show) {
+        
+        if show.imdbDetails.id != "" { configureDetailsStackView() }
         plotLabel.text = show.imdbDetails.description
+        genersLabel.text = show.imdbDetails.genres.joined(separator: " • ")
+        releaseYearLabel.text = "\(show.imdbDetails.release_year)"
+        runtimeLabel.text = show.imdbDetails.runtime
+        ratingLabel.text = "\(show.imdbDetails.rating)"
         posterImageView.downloadImage(from: show.imageUrl)
     }
     

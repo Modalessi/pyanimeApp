@@ -12,6 +12,7 @@ class ResultsVC: UIViewController {
     let searchQuery: String
     var results: [SearchResult] = []
     var resultsCollectionView: UICollectionView!
+    let emptyStateView = UIView()
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -27,6 +28,44 @@ class ResultsVC: UIViewController {
     }
     
     
+    func showEmptyState() {
+        
+        let sadFaceIconImage = UIImage(named: "sad-face")!
+        let emptyStateImageView = UIImageView(image: sadFaceIconImage)
+        emptyStateImageView.tintColor = .darkGray
+        emptyStateImageView.contentMode = .scaleAspectFill
+        emptyStateImageView.clipsToBounds = true
+        let emptyStateLabel = PATitleLabel(textAlignment: .center, fontSize: 24)
+        emptyStateLabel.text = "sorry, it seems there is no results"
+        emptyStateLabel.numberOfLines = 0
+        emptyStateLabel.textColor = .darkGray
+        
+        emptyStateView.translatesAutoresizingMaskIntoConstraints = false
+        emptyStateImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(emptyStateView)
+        emptyStateView.addSubview(emptyStateImageView)
+        emptyStateView.addSubview(emptyStateLabel)
+        
+        emptyStateView.bounds = resultsCollectionView.bounds
+        NSLayoutConstraint.activate([
+            
+            emptyStateImageView.topAnchor.constraint(equalTo: emptyStateView.topAnchor, constant: 150),
+            emptyStateImageView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.3),
+            emptyStateImageView.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.3),
+            emptyStateImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                        
+            
+            emptyStateLabel.topAnchor.constraint(equalTo: emptyStateImageView.bottomAnchor, constant: 20),
+            emptyStateLabel.leadingAnchor.constraint(equalTo: emptyStateView.leadingAnchor, constant: 20),
+            emptyStateLabel.trailingAnchor.constraint(equalTo: emptyStateView.trailingAnchor, constant: -20),
+            emptyStateLabel.heightAnchor.constraint(equalToConstant: 30)
+            
+        ])
+        
+    }
+    
+    
     func getSearchResults() {
         
         FaselhdAPI.shared.search(for: searchQuery) { (result) in
@@ -34,7 +73,12 @@ class ResultsVC: UIViewController {
             case .success(let results) :
                 self.results = results
                 DispatchQueue.main.async {
-                    self.resultsCollectionView.reloadData()
+                    if self.results.count == 0 {
+                        print("showing empty state")
+                        self.showEmptyState()
+                    } else {
+                        self.resultsCollectionView.reloadData()
+                    }
                 }
             case .failure(let error) :
                 DispatchQueue.main.async {

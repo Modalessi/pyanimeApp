@@ -43,7 +43,6 @@ class ImdbAPI {
             do {
                 
                 let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)  as! [String : Any]
-                print(json)
                 guard let results = json["search"] as? [[String : Any]] else {
                     completed(.failure(.extractingData))
                     return

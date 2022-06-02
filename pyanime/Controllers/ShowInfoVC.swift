@@ -14,22 +14,33 @@ class ShowInfoVC: UIViewController {
     let mainImageView = PAAvatarImageView(frame: .zero)
     var selectedSearchResult: SearchResult!
     var show: Show = Show()
-        
+    var favouriteBarButton = UIBarButtonItem()
+    var favourite: Favourite?
+    var isFavourite: Bool = false
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getShow()
+        favourite = PersistenceManager.dataController.getFavourite(for: selectedSearchResult)
+        isFavourite = favourite != nil
+        configureShowInofVC()
         configureEpisodesTableView()
+        getShow()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        showLoadingIndicator()
+    }
+    
+    override func viewDidLayoutSubviews() {
     }
     
     func getShow() {
-        FaselhdAPI.shared.getShow(for: selectedSearchResult) { (result) in
-            
+        self.showLoadingIndicator()
+        FaselhdAPI.shared.getShow(for: selectedSearchResult) { [weak self] (result) in
+            guard let self = self else { return }
+            self.dismisLoadingIndicator()
+            self.favouriteBarButton.isEnabled = true
             switch result {
             case .success(let show) :
                 self.show = show
@@ -39,7 +50,6 @@ class ShowInfoVC: UIViewController {
                         Int(s1.number)! < Int(s2.number)!
                     })
                     self.episodesTableView.reloadData()
-                    self.dismisLoadingIndicator()
                 }
             case .failure(let error) :
                 DispatchQueue.main.async {
@@ -50,6 +60,36 @@ class ShowInfoVC: UIViewController {
             
         }
     }
+    
+    
+    func configureShowInofVC() {
+        favouriteBarButton = UIBarButtonItem(image: UIImage(systemName: isFavourite ? "star.fill" : "star"), style: .plain, target: self, action: #selector(favourtieBarButtonTouched))
+        navigationItem.rightBarButtonItem = favouriteBarButton
+        favouriteBarButton.isEnabled = false
+    }
+    
+    
+    @objc func favourtieBarButtonTouched() {
+        isFavourite.toggle()
+        let favouriteImageName = isFavourite ? "star.fill" : "star"
+        let favouriteImage = UIImage(systemName: favouriteImageName)
+        favouriteBarButton.image = favouriteImage
+        
+        if isFavourite {
+            PersistenceManager.dataController.addToFavourites(show: show) { error in
+                guard let error = error else { return }
+                self.presentPAAlertOnMainThread(title: "Ooops", message: error.rawValue, buttonTitle: "Ok")
+            }
+        } else {
+            guard let favourite = favourite else { return }
+            PersistenceManager.dataController.removeFromFavourites(favourite) { error in
+                guard let error = error else { return }
+                self.presentPAAlertOnMainThread(title: "Ooops", message: error.rawValue, buttonTitle: "Ok")
+            }
+        }
+        
+    }
+    
     
     func configureEpisodesTableView() {
         view.addSubview(episodesTableView)

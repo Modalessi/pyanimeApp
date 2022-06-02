@@ -10,33 +10,49 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        
+        PersistenceManager.dataController.load()
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = createNavigationController()
+        window?.rootViewController = createTabBarController()
         window?.makeKeyAndVisible()
-        
         
     }
     
     
-    func createNavigationController()-> UINavigationController {
+    func createSearchNavigationController()-> UINavigationController {
         let searchVC = SearchVC()
         searchVC.title = "Search"
         searchVC.view.backgroundColor = .systemBackground
         let navigationController = UINavigationController(rootViewController: searchVC)
+        navigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 0)
         
         return navigationController
     }
     
     
-    func createTabBarController() {
+    func createFavouriteNavigationController()-> UINavigationController {
+        let favouriteVC = FavouriteVC()
+        favouriteVC.title = "Favourite"
+        favouriteVC.view.backgroundColor = .systemBackground
+        let navigationController = UINavigationController(rootViewController: favouriteVC)
+        navigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 0)
         
+        return navigationController
+    }
+    
+    
+    func createTabBarController()-> UITabBarController {
+        let tabBarController = UITabBarController()
+        tabBarController.viewControllers = [createSearchNavigationController(), createFavouriteNavigationController()]
+        
+        return tabBarController
     }
     
     

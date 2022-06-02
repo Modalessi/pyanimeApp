@@ -41,7 +41,6 @@ class ShowInfoCell: UITableViewCell {
         configureMainView()
         configurePosterImageView()
         configurePlotLabel()
-//        configureDetailsStackView()
     }
     
     

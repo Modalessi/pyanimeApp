@@ -10,9 +10,7 @@ import UIKit
 fileprivate var containerView: UIView!
 
 extension UIViewController {
-    
-//    https://www.faselhd.top/wp-content/uploads/2021/12/81tgdi5S-S._AC_SY741_-400x600.jpg
-    
+        
     
     func presentPAAlertOnMainThread(title: String, message: String, buttonTitle: String?) {
         

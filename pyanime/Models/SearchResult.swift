@@ -17,4 +17,10 @@ class SearchResult {
         self.imageUrl = imageUrl
     }
     
+    init(favourite: Favourite) {
+        self.name = favourite.name!
+        self.link = favourite.link!
+        self.imageUrl = favourite.imageUrl!
+    }
+    
 }

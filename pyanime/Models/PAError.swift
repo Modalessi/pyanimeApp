@@ -10,4 +10,5 @@ enum PAError: String, Error {
     case fetchHtml = "something went wrong in fetching html from url"
     case htmlParsing = "somthing went wrong while parsing html to document"
     case extractingData = "somthing went wrong while extracting data from document"
+    case unkownError = "somthing went wrong we dont know why, please try again"
 }

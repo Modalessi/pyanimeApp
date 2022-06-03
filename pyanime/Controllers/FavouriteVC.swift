@@ -12,11 +12,7 @@ class FavouriteVC: UIViewController {
     
     var favouritesCollectionView: UICollectionView!
     var favourites: [Favourite] = []
-    let emptyStateView = UIView()
-    let favouriteIconImage = UIImage(systemName: "star")
-    let emptyStateImageView = UIImageView()
-    let emptyStateLabel = PATitleLabel(textAlignment: .center, fontSize: 24)
-
+    var emptyStateView = PAEmptyStateView(image: UIImage(systemName: "star")!, message: "you dont have any favourites")
 
     
     override func viewDidLoad() {
@@ -82,43 +78,14 @@ class FavouriteVC: UIViewController {
     }
     
     func removeEmptyState() {
-        guard emptyStateView.superview != nil, emptyStateLabel.superview != nil else { return }
+        guard emptyStateView.superview != nil else { return }
         emptyStateView.removeFromSuperview()
-        emptyStateLabel.removeFromSuperview()
     }
     
     
     func showEmptyState() {
-        emptyStateImageView.image = favouriteIconImage
-        emptyStateImageView.tintColor = .darkGray
-        emptyStateImageView.contentMode = .scaleAspectFill
-        emptyStateImageView.clipsToBounds = true
-        emptyStateLabel.text = "you dont have any favourites"
-        emptyStateLabel.numberOfLines = 0
-        emptyStateLabel.textColor = .darkGray
-        
-        emptyStateView.translatesAutoresizingMaskIntoConstraints = false
-        emptyStateImageView.translatesAutoresizingMaskIntoConstraints = false
-
-        view.addSubview(emptyStateImageView)
-        view.addSubview(emptyStateLabel)
-        NSLayoutConstraint.activate([
-
-            emptyStateImageView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.3),
-            emptyStateImageView.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.3),
-            emptyStateImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyStateImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -100),
-
-        
-            emptyStateLabel.topAnchor.constraint(equalTo: emptyStateImageView.bottomAnchor, constant: 20),
-            emptyStateLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyStateLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            emptyStateLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            emptyStateLabel.heightAnchor.constraint(equalToConstant: 30)
-
-        ])
-        
-        
+        emptyStateView.frame = view.bounds
+        view.addSubview(emptyStateView)
     }
     
     

@@ -180,7 +180,7 @@ extension ShowInfoVC: UITableViewDelegate, UITableViewDataSource {
         let sectionView: UIView = UIView()
         let sectionTitleLabel = PATitleLabel(textAlignment: .center, fontSize: 18)
         sectionTitleLabel.layer.cornerRadius = 10
-        sectionTitleLabel.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
+        sectionTitleLabel.backgroundColor = .systemGray6
         sectionTitleLabel.clipsToBounds = true
         
         

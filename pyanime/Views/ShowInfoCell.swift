@@ -110,6 +110,10 @@ class ShowInfoCell: UITableViewCell {
         miniDetailsStackView.axis = .horizontal
         miniDetailsStackView.spacing = 10
         
+        genersLabel.textColor = .white
+        releaseYearLabel.textColor = .white
+        runtimeLabel.textColor = .white
+        ratingLabel.textColor = .white
         
         releaseYearIcon.tintColor = .white
         runtimeIcon.tintColor = .white

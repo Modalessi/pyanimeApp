@@ -54,9 +54,10 @@ class SearchVC: UIViewController {
         
         searchTextField.placeholder = "Search Query"
         searchTextField.textAlignment = .center
+        searchTextField.backgroundColor = .tertiarySystemBackground
         searchTextField.layer.borderWidth = 1
-        searchTextField.layer.cornerRadius = 15
-        searchTextField.layer.borderColor = UIColor.secondarySystemFill.cgColor
+        searchTextField.layer.cornerRadius = 10
+        searchTextField.layer.borderColor = UIColor.black.cgColor
         
         searchTextField.translatesAutoresizingMaskIntoConstraints = false
         

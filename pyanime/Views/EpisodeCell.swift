@@ -32,7 +32,7 @@ class EpisodeCell: UITableViewCell {
     func configureMainView() {
         
         mainView.layer.cornerRadius = 10
-        mainView.backgroundColor = UIColor(red: 20 / 255, green: 20 / 255, blue: 20 / 255, alpha: 1)
+        mainView.backgroundColor = .systemGray4
         mainView.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(mainView)
@@ -61,9 +61,9 @@ class EpisodeCell: UITableViewCell {
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         if highlighted {
-            mainView.backgroundColor = .quaternarySystemFill
+            mainView.backgroundColor = .systemGray5
         } else {
-            mainView.backgroundColor = UIColor(red: 20 / 255, green: 20 / 255, blue: 20 / 255, alpha: 1)
+            mainView.backgroundColor = .systemGray4
         }
     }
     

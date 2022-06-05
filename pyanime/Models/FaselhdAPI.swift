@@ -12,6 +12,12 @@ class FaselhdAPI {
     static let baseUrl: URL = URL(string: "https://www.faselhd.top/")!
     static let shared: FaselhdAPI = FaselhdAPI()
     
+    enum DiscoverySection: String, CaseIterable {
+        case slideShow = "Featured Shows"
+        case latestMovies = "Latest Movies"
+        case bestShows = "Best Shows"
+    }
+    
     var cache = NSCache<NSString, UIImage>()
     
     func search(for searchQuery: String, completed: @escaping (Result<[SearchResult], PAError>)->Void) {
@@ -354,6 +360,136 @@ class FaselhdAPI {
     }
     
     
+    
+    
+    func getDiscovery(completed: @escaping (Result<[DiscoverySection:[SearchResult]], PAError>)->Void) {
+        var discoveryUrlComponent = URLComponents(url: FaselhdAPI.baseUrl, resolvingAgainstBaseURL: true)
+        
+        discoveryUrlComponent?.path = "/m1"
+        
+        guard let discoveryUrl = discoveryUrlComponent?.url else {
+            completed(.failure(.invalidUrl))
+            return
+        }
+        
+        
+        let task = URLSession.shared.dataTask(with: discoveryUrl) { data, response, error in
+            
+            guard let data = data, error == nil else {
+                completed(.failure(.fetchHtml))
+                return
+            }
+            
+            guard let html = String(data: data, encoding: .ascii) else {
+                completed(.failure(.fetchHtml))
+                return
+            }
+            
+            guard let document = try? SwiftSoup.parse(html) else {
+                completed(.failure(.htmlParsing))
+                return
+            }
+            
+            do {
+                
+                let slideShowDivs = try document.getElementsByClass("row align-items-center")
+                let slidesShows = try self.getSlideShows(from: slideShowDivs)
+                
+                let latestMoviesDivs = try document.getElementsByClass("col-xl-2 col-lg-2 col-md-2 col-sm-3")
+                let latestMovies = try self.getLatestMovies(from: latestMoviesDivs)
+                
+                let bestShowsDivs = try document.getElementsByClass("col-xl-2 col-lg-2 col-md-3 col-sm-3")
+                let bestShows = try self.getBestShows(from: bestShowsDivs)
+                
+                completed(.success([
+                    .slideShow : slidesShows,
+                    .latestMovies : latestMovies,
+                    .bestShows : bestShows
+                ]))
+                
+            } catch {
+                completed(.failure(.extractingData))
+            }
+            
+        }
+        
+        task.resume()
+        
+        
+    }
+    
+    
+    
+    private func getSlideShows(from slides: Elements) throws -> [SearchResult]  {
+        var shows: [SearchResult] = []
+        
+        for slide in slides.array() {
+            
+            do {
+                let imageLink = try slide.getElementsByClass("img-fluid wp-post-image").first()?.attr("src")
+                let titleDiv = try slide.getElementsByClass("h1 mb-1").first()
+                var title = try titleDiv!.getElementsByTag("a").first()?.text()
+                let link = try titleDiv!.getElementsByTag("a").first()?.attr("href")
+                
+                title = String((title?.filter {$0.isASCII}) ?? "").trimmingCharacters(in: .whitespaces)
+                
+                shows.append(SearchResult(name: title!, link: link!, imageUrl: imageLink!))
+                
+            } catch let error {
+                throw error
+            }
+            
+            
+        }
+        
+        return shows
+    }
+    
+    
+    private func getLatestMovies(from latestMoviesDivs: Elements) throws -> [SearchResult] {
+        var shows: [SearchResult] = []
+        
+        for movieDiv in latestMoviesDivs.array()[0...11] {
+            
+            do {
+                let link = try movieDiv.getElementsByTag("a").first()?.attr("href")
+                let imageLink = try movieDiv.getElementsByTag("img").first()?.attr("data-src")
+                var title = try movieDiv.getElementsByClass("h5").first()?.text()
+                
+                title = String((title?.filter {$0.isASCII}) ?? "").trimmingCharacters(in: .whitespaces)
+                
+                shows.append(SearchResult(name: title!, link: link!, imageUrl: imageLink!))
+            } catch let error {
+                throw error
+            }
+            
+        }
+        
+        
+        return shows
+    }
+    
+    
+    private func getBestShows(from bestShowsDivs: Elements) throws -> [SearchResult] {
+        var shows: [SearchResult] = []
+        
+        do {
+            for showDiv in bestShowsDivs.array() {
+                let link = try showDiv.getElementsByTag("a").first()?.attr("href")
+                let imageLink = try showDiv.getElementsByTag("img").first()?.attr("data-src")
+                var title = try showDiv.getElementsByClass("h5").first()?.text()
+                
+                title = String((title?.filter {$0.isASCII}) ?? "").trimmingCharacters(in: .whitespaces)
+                
+                shows.append(SearchResult(name: title!, link: link!, imageUrl: imageLink!))
+            }
+        } catch let error {
+            throw error
+        }
+        
+        return shows
+    }
+    
+    
 }
 
-// ÙØ³ÙØ³Ù

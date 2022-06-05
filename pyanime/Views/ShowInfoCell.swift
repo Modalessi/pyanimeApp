@@ -135,7 +135,7 @@ class ShowInfoCell: UITableViewCell {
     
     
     func drawLayer() {
-        // add gradient layer above the poster image view
+        
         gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
         gradientLayer.locations = [0.0, 0.75]
         gradientLayer.frame = posterImageView.bounds

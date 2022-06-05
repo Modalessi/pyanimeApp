@@ -17,6 +17,8 @@
 		59242BEE28493AC700A4A592 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59242BED28493AC700A4A592 /* PersistenceManager.swift */; };
 		59242BF128493C8600A4A592 /* pyanime.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 59242BEF28493C8600A4A592 /* pyanime.xcdatamodeld */; };
 		59242BF3284A834500A4A592 /* PAEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59242BF2284A834500A4A592 /* PAEmptyStateView.swift */; };
+		59242BF7284ACDF200A4A592 /* DisocveryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59242BF6284ACDF200A4A592 /* DisocveryVC.swift */; };
+		59242BF9284C51AF00A4A592 /* CollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59242BF8284C51AF00A4A592 /* CollectionViewHeader.swift */; };
 		593AB73E283E3809007BEC58 /* FaselhdAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593AB73D283E3809007BEC58 /* FaselhdAPI.swift */; };
 		593AB7412840599D007BEC58 /* ShowInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593AB7402840599D007BEC58 /* ShowInfoVC.swift */; };
 		593AB74428405A02007BEC58 /* Show.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593AB74328405A02007BEC58 /* Show.swift */; };
@@ -52,6 +54,8 @@
 		59242BED28493AC700A4A592 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		59242BF028493C8600A4A592 /* pyanime.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = pyanime.xcdatamodel; sourceTree = "<group>"; };
 		59242BF2284A834500A4A592 /* PAEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAEmptyStateView.swift; sourceTree = "<group>"; };
+		59242BF6284ACDF200A4A592 /* DisocveryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisocveryVC.swift; sourceTree = "<group>"; };
+		59242BF8284C51AF00A4A592 /* CollectionViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewHeader.swift; sourceTree = "<group>"; };
 		593AB73D283E3809007BEC58 /* FaselhdAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaselhdAPI.swift; sourceTree = "<group>"; };
 		593AB7402840599D007BEC58 /* ShowInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowInfoVC.swift; sourceTree = "<group>"; };
 		593AB74328405A02007BEC58 /* Show.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Show.swift; sourceTree = "<group>"; };
@@ -145,6 +149,7 @@
 				59EC7AF32833E46B00C913BF /* ShowInfoCell.swift */,
 				59242BE928467B4800A4A592 /* GradiantView.swift */,
 				59242BF2284A834500A4A592 /* PAEmptyStateView.swift */,
+				59242BF8284C51AF00A4A592 /* CollectionViewHeader.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -158,6 +163,7 @@
 				59C3C0BE2801309600132FF0 /* SearchVC.swift */,
 				593AB7402840599D007BEC58 /* ShowInfoVC.swift */,
 				59242BEB2847064D00A4A592 /* FavouriteVC.swift */,
+				59242BF6284ACDF200A4A592 /* DisocveryVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -309,6 +315,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				593AB7412840599D007BEC58 /* ShowInfoVC.swift in Sources */,
+				59242BF9284C51AF00A4A592 /* CollectionViewHeader.swift in Sources */,
 				59C3C0E928013D6300132FF0 /* PAButton.swift in Sources */,
 				59C3C0DF28013CEC00132FF0 /* PAAlertViewController.swift in Sources */,
 				598F8ED82845833B002AAC83 /* ImdbShowDetails.swift in Sources */,
@@ -330,6 +337,7 @@
 				59242BEC2847064D00A4A592 /* FavouriteVC.swift in Sources */,
 				59C3C0E428013D2100132FF0 /* PATitleLabel.swift in Sources */,
 				593AB74728405A65007BEC58 /* Season.swift in Sources */,
+				59242BF7284ACDF200A4A592 /* DisocveryVC.swift in Sources */,
 				59C3C0BD2801309600132FF0 /* SceneDelegate.swift in Sources */,
 				59215FE6280D7DA300610DF4 /* PAAvatarImageView.swift in Sources */,
 				5903D3A4281061E2003FA3ED /* Episode.swift in Sources */,

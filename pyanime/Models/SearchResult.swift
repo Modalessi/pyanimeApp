@@ -6,7 +6,7 @@
 //
 
 
-class SearchResult {
+class SearchResult: Hashable {
     var name: String
     var link: String
     var imageUrl: String
@@ -21,6 +21,14 @@ class SearchResult {
         self.name = favourite.name!
         self.link = favourite.link!
         self.imageUrl = favourite.imageUrl!
+    }
+    
+    func hash(into hasher: inout Hasher) {
+      hasher.combine(link)
+    }
+    
+    static func == (lhs: SearchResult, rhs: SearchResult) -> Bool {
+        return lhs.link == rhs.link
     }
     
 }

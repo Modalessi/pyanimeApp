@@ -48,9 +48,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     
+    func createDiscoveryNavigationController()-> UINavigationController {
+        let disoveryVC = DiscoveryVC()
+        disoveryVC.title = "Dicovery"
+        disoveryVC.view.backgroundColor = .systemBackground
+        let navigationController = UINavigationController(rootViewController: disoveryVC)
+        navigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .mostViewed, tag: 0)
+        
+        return navigationController
+    }
+    
+    
     func createTabBarController()-> UITabBarController {
         let tabBarController = UITabBarController()
-        tabBarController.viewControllers = [createSearchNavigationController(), createFavouriteNavigationController()]
+        tabBarController.viewControllers = [createDiscoveryNavigationController(), createSearchNavigationController(), createFavouriteNavigationController()]
         
         return tabBarController
     }

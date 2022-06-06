@@ -50,7 +50,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func createDiscoveryNavigationController()-> UINavigationController {
         let disoveryVC = DiscoveryVC()
-        disoveryVC.title = "Dicovery"
+        disoveryVC.title = "Discovery"
         disoveryVC.view.backgroundColor = .systemBackground
         let navigationController = UINavigationController(rootViewController: disoveryVC)
         navigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .mostViewed, tag: 0)

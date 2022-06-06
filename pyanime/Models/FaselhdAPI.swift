@@ -16,6 +16,8 @@ class FaselhdAPI {
         case slideShow = "Featured Shows"
         case latestMovies = "Latest Movies"
         case bestShows = "Best Shows"
+        case latestSeriesEpisodes = "Latest Episodes"
+        case latestAnimeEpisodes = "Latest Anime Episodes"
     }
     
     var cache = NSCache<NSString, UIImage>()
@@ -60,7 +62,14 @@ class FaselhdAPI {
                     let searchResultLink = try aTag!.attr("href")
                     var searchResultName = try aTag!.getElementsByClass("postInner").first()?.getElementsByClass("h1").text()
                     
-                    searchResultName = String((searchResultName?.filter {$0.isASCII}) ?? "").trimmingCharacters(in: .whitespaces)
+                    
+                    
+                    if let data = searchResultName!.data(using: .isoLatin1) {
+                        searchResultName = String(data: data, encoding: .utf8) ?? "season"
+                    } else {
+                        searchResultName = String((searchResultName?.filter {$0.isASCII}) ?? "").trimmingCharacters(in: .whitespaces)
+                    }
+                    
                     
                     let searchResultImageLink = try aTag!.getElementsByClass("imgdiv-class").first()?.select("img").first()?.attr("data-src")
                     
@@ -111,7 +120,7 @@ class FaselhdAPI {
             let show = Show()
             var imdbDeatils = ImdbShowDetails()
             let dispatchGroup = DispatchGroup()
-            
+ 
             dispatchGroup.enter()
             ImdbAPI.shared.getShowDetails(for: searchResult) { (result) in
                 switch result {
@@ -122,7 +131,7 @@ class FaselhdAPI {
                 }
                 dispatchGroup.leave()
             }
-            
+
             
             dispatchGroup.notify(queue: DispatchQueue.main, execute: {
                 if self.isMovie(document) {
@@ -159,7 +168,76 @@ class FaselhdAPI {
     }
     
     
-    func hasSeasons(_ document: Document)->Bool {
+    
+//    private func getImdbDetails(for document: Document) throws -> ImdbShowDetails {
+//        var details = ImdbShowDetails()
+//
+//        do {
+//            let discreptionDiv = try document.getElementsByClass("singleDesc").first()?.getElementsByTag("p").first()
+//            var discreption = try discreptionDiv?.text()
+//            if let data = discreption!.data(using: .isoLatin1) {
+//                discreption = String(data: data, encoding: .utf8)
+//            } else {
+//                throw PAError.extractingData
+//            }
+//            details.description = discreption!
+//
+//            let detailsDivs = try document.getElementsByClass("col-xl-6 col-lg-6 col-md-6 col-sm-6")
+//
+//            for div in detailsDivs {
+//                var label = try div.getElementsByTag("span").first()?.text()
+//                let data = label!.data(using: .isoLatin1)
+//                label = String(data: data!, encoding: .utf8)
+//
+//                if label!.contains("تصنيف ") {
+//                    let genersTags = try div.getElementsByTag("a").array()
+//                    var geners = try genersTags.map {try $0.text()}
+//                    geners = geners.map { String(data: $0.data(using: .isoLatin1)!, encoding: .utf8)! }
+//                    details.genres = geners
+//
+//
+//                } else if label!.contains("توقيت ") || label!.contains("مدة ") {
+//                    var duration = try div.getElementsByTag("span").first()?.text()
+//                    duration = String(duration!.filter { $0.isNumber })
+//                    details.runtime = duration!
+//
+//
+//                } else if label!.contains("رقم ") {
+//                    var id = try div.getElementsByTag("span").first()?.text()
+//                    id = String(id!.filter { $0.isASCII })
+//                    details.id = id!
+//
+//                } else if label!.contains("جودة ") {
+//                    let quilityTags = try div.getElementsByTag("a").array()
+//                    let quialities = try quilityTags.map {try $0.text()}
+//                    details.quilities = quialities.joined(separator: ", ")
+//                }
+//            }
+//
+//
+//            let starRatingDiv = try document.getElementsByClass("starSys").first()
+//            let ratingText = try starRatingDiv!.text()
+//
+//            let rating = String((ratingText.split(separator: " ").filter { $0.contains(".") }).first!)
+//            details.rating = rating
+//
+//            let titleDiv = try document.getElementsByClass("h1 title").first()
+//            let title = try titleDiv?.text()
+//            details.title = title!
+//
+//
+//
+//            return details
+//
+//        } catch let error {
+//            throw error
+//        }
+//
+//    }
+    
+    
+    
+    private func hasSeasons(_ document: Document)->Bool {
         do {
             let seasonsDiv = try document.getElementById("seasonList")
             return seasonsDiv != nil
@@ -169,7 +247,7 @@ class FaselhdAPI {
     }
     
     
-    func isMovie(_ document: Document)-> Bool {
+    private func isMovie(_ document: Document)-> Bool {
         do {
             let episodesDiv = try document.getElementById("epAll")
             return episodesDiv == nil
@@ -179,7 +257,7 @@ class FaselhdAPI {
     }
     
     
-    func getSeasons(_ document: Document, completed: @escaping (Result<[Season], PAError>)->Void) {
+    private func getSeasons(_ document: Document, completed: @escaping (Result<[Season], PAError>)->Void) {
         var seasons: [Season] = []
         
         do {
@@ -193,7 +271,7 @@ class FaselhdAPI {
                 let id = try div!.attr("data-href")
                 let link = baseUrl + id
                 var title = try div!.getElementsByClass("title").text()
-                title = String(title.filter {$0.isASCII} ).trimmingCharacters(in: .whitespaces)
+                title = String((title.filter {$0.isASCII})).trimmingCharacters(in: .whitespaces)
                 dispatchGroup.enter()
                 getEpisodes(link) { (result) in
                     switch result {
@@ -215,7 +293,7 @@ class FaselhdAPI {
     }
     
     
-    func getEpisodes(_ link: String, completed: @escaping (Result<[Episode], PAError>)->Void) {
+    private func getEpisodes(_ link: String, completed: @escaping (Result<[Episode], PAError>)->Void) {
         
         let showUrl = URL(string: link)
         let task = URLSession.shared.dataTask(with: showUrl!) { (data, response, error) in
@@ -313,7 +391,7 @@ class FaselhdAPI {
     }
     
     
-    func getIframePage(_ link: String, completed: @escaping (Result<String, PAError>)->Void) {
+    private func getIframePage(_ link: String, completed: @escaping (Result<String, PAError>)->Void) {
         
         guard let iframeUrl = URL(string: link) else {
             completed(.failure(.invalidUrl))
@@ -401,10 +479,17 @@ class FaselhdAPI {
                 let bestShowsDivs = try document.getElementsByClass("col-xl-2 col-lg-2 col-md-3 col-sm-3")
                 let bestShows = try self.getBestShows(from: bestShowsDivs)
                 
+                let latestEpisodesDivs = try document.getElementsByClass("epDivHome")
+                let latestEpisodes = try self.getLatestEpisodes(from: latestEpisodesDivs)
+                
+                let latestSeriesEpisodes = latestEpisodes[0...5].map { $0 }
+                let latestAnimeEpisodes = latestEpisodes[6...11].map { $0 }
                 completed(.success([
-                    .slideShow : slidesShows,
-                    .latestMovies : latestMovies,
-                    .bestShows : bestShows
+                    .slideShow: slidesShows,
+                    .latestMovies: latestMovies,
+                    .bestShows: bestShows,
+                    .latestSeriesEpisodes: latestSeriesEpisodes,
+                    .latestAnimeEpisodes: latestAnimeEpisodes
                 ]))
                 
             } catch {
@@ -431,8 +516,12 @@ class FaselhdAPI {
                 var title = try titleDiv!.getElementsByTag("a").first()?.text()
                 let link = try titleDiv!.getElementsByTag("a").first()?.attr("href")
                 
-                title = String((title?.filter {$0.isASCII}) ?? "").trimmingCharacters(in: .whitespaces)
-                
+                if let data = title!.data(using: .isoLatin1) {
+                    title = String(data: data, encoding: .utf8) ?? "season"
+                } else {
+                    title = String((title?.filter {$0.isASCII}) ?? "").trimmingCharacters(in: .whitespaces)
+                }
+                                
                 shows.append(SearchResult(name: title!, link: link!, imageUrl: imageLink!))
                 
             } catch let error {
@@ -456,8 +545,12 @@ class FaselhdAPI {
                 let imageLink = try movieDiv.getElementsByTag("img").first()?.attr("data-src")
                 var title = try movieDiv.getElementsByClass("h5").first()?.text()
                 
-                title = String((title?.filter {$0.isASCII}) ?? "").trimmingCharacters(in: .whitespaces)
-                
+                if let data = title!.data(using: .isoLatin1) {
+                    title = String(data: data, encoding: .utf8) ?? "season"
+                } else {
+                    title = String((title?.filter {$0.isASCII}) ?? "").trimmingCharacters(in: .whitespaces)
+                }
+                                
                 shows.append(SearchResult(name: title!, link: link!, imageUrl: imageLink!))
             } catch let error {
                 throw error
@@ -479,7 +572,12 @@ class FaselhdAPI {
                 let imageLink = try showDiv.getElementsByTag("img").first()?.attr("data-src")
                 var title = try showDiv.getElementsByClass("h5").first()?.text()
                 
-                title = String((title?.filter {$0.isASCII}) ?? "").trimmingCharacters(in: .whitespaces)
+                if let data = title!.data(using: .isoLatin1) {
+                    title = String(data: data, encoding: .utf8) ?? "season"
+                } else {
+                    title = String((title?.filter {$0.isASCII}) ?? "").trimmingCharacters(in: .whitespaces)
+                }
+                
                 
                 shows.append(SearchResult(name: title!, link: link!, imageUrl: imageLink!))
             }
@@ -490,6 +588,66 @@ class FaselhdAPI {
         return shows
     }
     
+    
+    private func getLatestEpisodes(from latestEpisodesDiv: Elements) throws -> [SearchResult] {
+        var latestEpisodes: [SearchResult] = []
+        
+        do {
+            for episodeDiv in latestEpisodesDiv.array() {
+                let link = try episodeDiv.getElementsByTag("a").first()?.attr("href")
+                let imageLink = try episodeDiv.getElementsByTag("img").first()?.attr("data-src")
+                var title = try episodeDiv.getElementsByClass("h4").first()?.text()
+                
+                if let data = title!.data(using: .isoLatin1) {
+                    title = String(data: data, encoding: .utf8) ?? "season"
+                } else {
+                    title = String((title?.filter {($0.isLetter || $0.isWhitespace) && $0.isASCII}) ?? "").trimmingCharacters(in: .whitespaces)
+                }
+                
+                latestEpisodes.append(SearchResult(name: title!, link: link!, imageUrl: imageLink!))
+            }
+        } catch let error {
+            throw error
+        }
+        
+        return latestEpisodes
+    }
+    
+    
+    func getPoster(from link: String, completed: @escaping (Result<String, PAError>)->Void) {
+        
+        guard let showUrl = URL(string: link) else {
+            completed(.failure(.invalidUrl))
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: showUrl) { data, response, error in
+            guard let data = data, error == nil else { return }
+            
+            
+            guard let html = String(data: data, encoding: .ascii) else {
+                completed(.failure(.fetchHtml))
+                return
+            }
+            
+            guard let document = try? SwiftSoup.parse(html) else {
+                completed(.failure(.htmlParsing))
+                return
+            }
+            
+            do {
+                let imageDiv = try document.getElementsByClass("img-fluid poster").first()
+                let imageLink = try imageDiv?.attr("src")
+                
+                completed(.success(imageLink!))
+            } catch {
+                completed(.failure(.extractingData))
+            }
+            
+        }
+        
+        task.resume()
+    }
     
 }
 

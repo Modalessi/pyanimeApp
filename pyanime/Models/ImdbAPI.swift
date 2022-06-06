@@ -19,7 +19,9 @@ class ImdbAPI {
         
         var searchUrlComponents = URLComponents(url: baseUrl, resolvingAgainstBaseURL: true)
         
-        searchUrlComponents?.queryItems = [ URLQueryItem(name: "s", value: searchResult.name) ]
+        let title = String((searchResult.name.filter {($0.isLetter && $0.isASCII) || $0.isWhitespace})).trimmingCharacters(in: .whitespaces)
+        print(title)
+        searchUrlComponents?.queryItems = [ URLQueryItem(name: "s", value: title) ]
         
         guard let searchUrl = searchUrlComponents?.url else {
             completed(.failure(.invalidUrl))

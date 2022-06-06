@@ -245,6 +245,7 @@ extension ShowInfoVC: UITableViewDelegate, UITableViewDataSource {
                 print(error.rawValue)
             case .success(let streamUrl) :
                 DispatchQueue.main.async {
+                    print(streamUrl)
                     self.presentMoviePlayer(with: streamUrl)
                 }
             }

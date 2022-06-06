@@ -9,7 +9,7 @@ import UIKit
 
 class DiscoveryVC: UIViewController {
     
-    var discovery: [FaselhdAPI.DiscoverySection : [SearchResult]] = [.slideShow: [], .latestMovies: [], .bestShows: []]
+    var discovery: [FaselhdAPI.DiscoverySection : [SearchResult]] = [.slideShow: [], .latestMovies: [], .bestShows: [], .latestSeriesEpisodes: [], .latestAnimeEpisodes: []]
     
     
     var discoveryCollectionView: UICollectionView!
@@ -29,8 +29,11 @@ class DiscoveryVC: UIViewController {
     func configureDiscoveryCollectionView() {
         discoveryCollectionView = UICollectionView(frame: view.bounds, collectionViewLayout: generateLayout())
         discoveryCollectionView.backgroundColor = .systemBackground
+        discoveryCollectionView.showsVerticalScrollIndicator = false
+        discoveryCollectionView.showsHorizontalScrollIndicator = false
         discoveryCollectionView.delegate = self
         discoveryCollectionView.register(ResultCell.self, forCellWithReuseIdentifier: ResultCell.reuseID)
+        discoveryCollectionView.register(DiscoveryCollectionEpisodeCell.self, forCellWithReuseIdentifier: DiscoveryCollectionEpisodeCell.reuseID)
         discoveryCollectionView.register(CollectionViewHeader.self, forSupplementaryViewOfKind: CollectionViewHeader.reuseID, withReuseIdentifier: CollectionViewHeader.reuseID)
         
         discoveryCollectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -46,14 +49,25 @@ class DiscoveryVC: UIViewController {
     
     func configureDataSource() {
         dataSource = UICollectionViewDiffableDataSource<FaselhdAPI.DiscoverySection, SearchResult>(collectionView: discoveryCollectionView, cellProvider: { collectionView, indexPath, searchResult in
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ResultCell.reuseID, for: indexPath) as! ResultCell
             
+            let section = FaselhdAPI.DiscoverySection.allCases[indexPath.section]
+            
+            switch section {
+                
+            case .bestShows, .slideShow, .latestMovies :
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ResultCell.reuseID, for: indexPath) as! ResultCell
                 cell.set(result: searchResult)
                 return cell
+            
+            case .latestAnimeEpisodes, .latestSeriesEpisodes :
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DiscoveryCollectionEpisodeCell.reuseID, for: indexPath) as! DiscoveryCollectionEpisodeCell
+                cell.setWith(searchResult)
+                return cell
+                
+            }
         })
         
         dataSource.supplementaryViewProvider = {(collectionView: UICollectionView, kind: String, indexPath: IndexPath) in
-            
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: CollectionViewHeader.reuseID, withReuseIdentifier: CollectionViewHeader.reuseID, for: indexPath) as! CollectionViewHeader
             header.label.text = FaselhdAPI.DiscoverySection.allCases[indexPath.section].rawValue
             return header
@@ -67,32 +81,68 @@ class DiscoveryVC: UIViewController {
     func generateLayout()-> UICollectionViewLayout {
         
         let layout = UICollectionViewCompositionalLayout { sectionIndex, layoutEnviroment in
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            
-            
-            let groupSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(0.47),
-              heightDimension: .fractionalHeight(0.33))
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
-            group.contentInsets = NSDirectionalEdgeInsets(
-              top: 5,
-              leading: 5,
-              bottom: 5,
-              trailing: 5)
-            
-            
-            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(40))
-            let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: CollectionViewHeader.reuseID, alignment: .top)
-            
-            let section = NSCollectionLayoutSection(group: group)
-            section.boundarySupplementaryItems = [headerItem]
-            section.orthogonalScrollingBehavior = .continuous
-            section.accessibilityScroll(.right)
-            return section
+            let section = FaselhdAPI.DiscoverySection.allCases[sectionIndex]
+            switch section {
+            case .slideShow, .latestMovies, .bestShows :
+                return self.generateSlideLayout()
+            case .latestSeriesEpisodes, .latestAnimeEpisodes :
+                return self.generateHorzintalLayout()
+            }
         }
         
         return layout
+    }
+    
+    
+    func generateSlideLayout()-> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.47),
+          heightDimension: .fractionalHeight(0.33))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+        group.contentInsets = NSDirectionalEdgeInsets(
+          top: 5,
+          leading: 5,
+          bottom: 5,
+          trailing: 5)
+        
+        
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(40))
+        let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: CollectionViewHeader.reuseID, alignment: .top)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.boundarySupplementaryItems = [headerItem]
+        section.orthogonalScrollingBehavior = .continuous
+        section.accessibilityScroll(.right)
+        return section
+    }
+    
+    
+    func generateHorzintalLayout()-> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+          heightDimension: .fractionalHeight(0.1))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+        group.contentInsets = NSDirectionalEdgeInsets(
+          top: 5,
+          leading: 5,
+          bottom: 5,
+          trailing: 5)
+        
+        
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(40))
+        let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: CollectionViewHeader.reuseID, alignment: .top)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.boundarySupplementaryItems = [headerItem]
+        return section
     }
     
     
@@ -106,6 +156,12 @@ class DiscoveryVC: UIViewController {
         
         snapshot.appendSections([FaselhdAPI.DiscoverySection.bestShows])
         snapshot.appendItems(discovery[.bestShows]!)
+        
+        snapshot.appendSections([FaselhdAPI.DiscoverySection.latestSeriesEpisodes])
+        snapshot.appendItems(discovery[.latestSeriesEpisodes]!)
+        
+        snapshot.appendSections([FaselhdAPI.DiscoverySection.latestAnimeEpisodes])
+        snapshot.appendItems(discovery[.latestAnimeEpisodes]!)
 
         return snapshot
     }
@@ -124,41 +180,44 @@ class DiscoveryVC: UIViewController {
         }
     }
     
+    
+    func procedsToShowVC(with selectedSearchResult: SearchResult) {
+        let showVC = ShowInfoVC()
+        showVC.title = selectedSearchResult.name
+        showVC.selectedSearchResult = selectedSearchResult
+        navigationController?.pushViewController(showVC, animated: true)
+    }
+    
 }
 
 
 
-extension DiscoveryVC: UICollectionViewDelegate, UICollectionViewDataSource {
+extension DiscoveryVC: UICollectionViewDelegate {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch collectionView.tag {
-        case 0 :
-            return discovery[.slideShow]!.count
-        case 1 :
-            return discovery[.latestMovies]!.count
-        case 2 :
-            return discovery[.bestShows]!.count
-        default :
-            return 0
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let resultCell = collectionView.dequeueReusableCell(withReuseIdentifier: ResultCell.reuseID, for: indexPath) as! ResultCell
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let sectionNumber = indexPath.section
+        let rowNumber = indexPath.row
+        let section = FaselhdAPI.DiscoverySection.allCases[sectionNumber]
+        let selectedShow = discovery[FaselhdAPI.DiscoverySection.allCases[sectionNumber]]![rowNumber]
         
-        
-        var section: FaselhdAPI.DiscoverySection = .bestShows
-        if collectionView.tag == 0 {
-            section = .slideShow
-        } else if collectionView.tag == 1 {
-            section = .latestMovies
+        if section == .latestAnimeEpisodes || section == .latestSeriesEpisodes {
+            self.showLoadingIndicator()
+            FaselhdAPI.shared.getPoster(from: selectedShow.link) { result in
+                self.dismisLoadingIndicator()
+                switch result {
+                case .success(let imageLink) :
+                    selectedShow.imageUrl = imageLink
+                    DispatchQueue.main.async {
+                        self.procedsToShowVC(with: selectedShow)
+                    }
+                case .failure(let error) :
+                    print(error)
+                }
+            }
         } else {
-            section = .bestShows
+            procedsToShowVC(with: selectedShow)
         }
         
-        
-        resultCell.set(result: discovery[section]![indexPath.row])
-        return resultCell
     }
     
 }

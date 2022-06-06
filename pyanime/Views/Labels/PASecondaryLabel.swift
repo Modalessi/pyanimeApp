@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PASecondaryFontLabel: UILabel {
+class PASecondaryLabel: UILabel {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
